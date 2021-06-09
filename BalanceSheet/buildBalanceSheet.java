@@ -1,8 +1,8 @@
 package BalanceSheet;
 
 import CommonModules.RupeeFormatter;
-import CommonModules.bsheetElements;
-import IngestionEngine.ingestExcel;
+import CommonModules.ChartOfAccounts;
+import IngestionEngine.ingestChartOfAcctsExcel;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -22,7 +22,7 @@ public class buildBalanceSheet {
     public double totalCurrentLiabilities;
     private double totalNonCurrentLiabilities;
 
-    public bsheetElements[] bsheetElementsList;
+    public ChartOfAccounts[] chartOfAccountsList;
     private LocalDate survivalDate;
 
     DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
@@ -37,57 +37,57 @@ public class buildBalanceSheet {
         totalCurrentLiabilities = 0;
         totalNonCurrentAssets = 0;
         totalNonCurrentLiabilities = 0;
-        String fileWithPathname = "C:\\dev\\Data\\BL.xlsx";
-        ingestExcel balanceSheet = new ingestExcel(fileWithPathname);
+        String fileWithPathname = "C:\\dev\\Data\\ChartOfAccounts.xlsx";
+        ingestChartOfAcctsExcel balanceSheet = new ingestChartOfAcctsExcel(fileWithPathname);
         //IngestH2db balanceSheet = new IngestH2db();
 
-        bsheetElementsList = balanceSheet.transferData();
-        for (int i=0; i < bsheetElements.numofElements; i++){
-            if(bsheetElementsList[i].subType.equals("Rent") && bsheetElementsList[i].itemDescription.equals("RentalIncome1")) {
-                this.rentalIncomeOne = bsheetElementsList[i].cashValue;
+        chartOfAccountsList = balanceSheet.transferData();
+        for (int i = 0; i < ChartOfAccounts.numofElements; i++){
+            if(chartOfAccountsList[i].subType.equals("Rent") && chartOfAccountsList[i].itemDescription.equals("RentalIncome1")) {
+                this.rentalIncomeOne = chartOfAccountsList[i].cashValue;
             } else
-            if(bsheetElementsList[i].subType.equals("EMI")) {
-                monthlyEMI = (bsheetElementsList[i].cashValue/12) + monthlyEMI;
-                totalCurrentLiabilities = totalCurrentLiabilities + bsheetElementsList[i].cashValue;
+            if(chartOfAccountsList[i].subType.equals("EMI")) {
+                monthlyEMI = (chartOfAccountsList[i].cashValue/12) + monthlyEMI;
+                totalCurrentLiabilities = totalCurrentLiabilities + chartOfAccountsList[i].cashValue;
             }else
-            if(bsheetElementsList[i].subType.equals("Rent") && bsheetElementsList[i].itemDescription.equals("RentalIncome2")) {
-                this.rentalIncomeTwo = bsheetElementsList[i].cashValue;
+            if(chartOfAccountsList[i].subType.equals("Rent") && chartOfAccountsList[i].itemDescription.equals("RentalIncome2")) {
+                this.rentalIncomeTwo = chartOfAccountsList[i].cashValue;
             } else
-            if(bsheetElementsList[i].subType.equals("Rent") && bsheetElementsList[i].itemDescription.equals("RentalIncome3")) {
-                this.rentalIncomeThree = bsheetElementsList[i].cashValue;
+            if(chartOfAccountsList[i].subType.equals("Rent") && chartOfAccountsList[i].itemDescription.equals("RentalIncome3")) {
+                this.rentalIncomeThree = chartOfAccountsList[i].cashValue;
             } else
-            if(bsheetElementsList[i].subType.equals("Account Payables") && bsheetElementsList[i].itemDescription.equals("HouseHoldExpenses")) {
-                this.monthlyExpenses = bsheetElementsList[i].cashValue/12;
-                totalCurrentLiabilities = totalCurrentLiabilities + bsheetElementsList[i].cashValue;
+            if(chartOfAccountsList[i].subType.equals("Account Payables") && chartOfAccountsList[i].itemDescription.equals("HouseHoldExpenses")) {
+                this.monthlyExpenses = chartOfAccountsList[i].cashValue/12;
+                totalCurrentLiabilities = totalCurrentLiabilities + chartOfAccountsList[i].cashValue;
             } else
-            if(bsheetElementsList[i].subType.equals("Total Current Assets") && bsheetElementsList[i].itemDescription.equals("Total Current Assets")) {
-                bsheetElementsList[i].cashValue = totalCurrentAssets;
-                bsheetElementsList[i].cashValueFmtd = rf.formattedRupee(ft.format(bsheetElementsList[i].cashValue));
+            if(chartOfAccountsList[i].subType.equals("Total Current Assets") && chartOfAccountsList[i].itemDescription.equals("Total Current Assets")) {
+                chartOfAccountsList[i].cashValue = totalCurrentAssets;
+                chartOfAccountsList[i].cashValueFmtd = rf.formattedRupee(ft.format(chartOfAccountsList[i].cashValue));
             }else
-            if(bsheetElementsList[i].subType.equals("Current Assets") || bsheetElementsList[i].subType.equals("Account Receivables")) {
-                totalCurrentAssets = totalCurrentAssets + bsheetElementsList[i].cashValue;
+            if(chartOfAccountsList[i].subType.equals("Current Assets") || chartOfAccountsList[i].subType.equals("Account Receivables")) {
+                totalCurrentAssets = totalCurrentAssets + chartOfAccountsList[i].cashValue;
             }  else
-            if(bsheetElementsList[i].subType.equals("Current Liabilities") && bsheetElementsList[i].itemDescription.equals("Current Liabilities")) {
-                bsheetElementsList[i].cashValue = totalCurrentLiabilities;
-                bsheetElementsList[i].cashValueFmtd = rf.formattedRupee(ft.format(bsheetElementsList[i].cashValue));
+            if(chartOfAccountsList[i].subType.equals("Current Liabilities") && chartOfAccountsList[i].itemDescription.equals("Current Liabilities")) {
+                chartOfAccountsList[i].cashValue = totalCurrentLiabilities;
+                chartOfAccountsList[i].cashValueFmtd = rf.formattedRupee(ft.format(chartOfAccountsList[i].cashValue));
             }else
-            if(bsheetElementsList[i].subType.equals("Accrued Expenses") || bsheetElementsList[i].subType.equals("EMI") ||
-                    bsheetElementsList[i].subType.equals("Account Payables")) {
-                totalCurrentLiabilities = totalCurrentLiabilities + bsheetElementsList[i].cashValue;
+            if(chartOfAccountsList[i].subType.equals("Accrued Expenses") || chartOfAccountsList[i].subType.equals("EMI") ||
+                    chartOfAccountsList[i].subType.equals("Account Payables")) {
+                totalCurrentLiabilities = totalCurrentLiabilities + chartOfAccountsList[i].cashValue;
             }else
-            if(bsheetElementsList[i].subType.equals("Non Current Liabilities") && bsheetElementsList[i].itemDescription.equals("Non Current Liabilities")) {
-                bsheetElementsList[i].cashValue = totalNonCurrentLiabilities;
-                bsheetElementsList[i].cashValueFmtd = rf.formattedRupee(ft.format(bsheetElementsList[i].cashValue));
+            if(chartOfAccountsList[i].subType.equals("Non Current Liabilities") && chartOfAccountsList[i].itemDescription.equals("Non Current Liabilities")) {
+                chartOfAccountsList[i].cashValue = totalNonCurrentLiabilities;
+                chartOfAccountsList[i].cashValueFmtd = rf.formattedRupee(ft.format(chartOfAccountsList[i].cashValue));
             }else
-            if(bsheetElementsList[i].subType.equals("Long Term Debts")) {
-                totalNonCurrentLiabilities = totalNonCurrentLiabilities + bsheetElementsList[i].cashValue;
+            if(chartOfAccountsList[i].subType.equals("Long Term Debts")) {
+                totalNonCurrentLiabilities = totalNonCurrentLiabilities + chartOfAccountsList[i].cashValue;
             }else
-            if(bsheetElementsList[i].subType.equals("Total Non Current Assets") && bsheetElementsList[i].itemDescription.equals("Total Non Current Assets")) {
-                bsheetElementsList[i].cashValue = totalNonCurrentAssets;
-                bsheetElementsList[i].cashValueFmtd = rf.formattedRupee(ft.format(bsheetElementsList[i].cashValue));
+            if(chartOfAccountsList[i].subType.equals("Total Non Current Assets") && chartOfAccountsList[i].itemDescription.equals("Total Non Current Assets")) {
+                chartOfAccountsList[i].cashValue = totalNonCurrentAssets;
+                chartOfAccountsList[i].cashValueFmtd = rf.formattedRupee(ft.format(chartOfAccountsList[i].cashValue));
             }else
-            if(bsheetElementsList[i].subType.equals("Fixed Assets") || bsheetElementsList[i].subType.equals("Other Assets")) {
-                totalNonCurrentAssets = totalNonCurrentAssets + bsheetElementsList[i].cashValue;
+            if(chartOfAccountsList[i].subType.equals("Fixed Assets") || chartOfAccountsList[i].subType.equals("Other Assets")) {
+                totalNonCurrentAssets = totalNonCurrentAssets + chartOfAccountsList[i].cashValue;
             }
         }
         incomeTotal = monthlyTakeHomeOne + monthlyTakeHomeTwo + rentalIncomeOne + rentalIncomeTwo + rentalIncomeThree;

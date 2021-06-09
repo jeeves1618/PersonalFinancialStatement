@@ -1,8 +1,8 @@
 package IncomeStatement;
 
 import CommonModules.RupeeFormatter;
-import CommonModules.bsheetElements;
-import IngestionEngine.ingestExcel;
+import CommonModules.ChartOfAccounts;
+import IngestionEngine.ingestChartOfAcctsExcel;
 
 import java.text.DecimalFormat;
 
@@ -36,14 +36,14 @@ public class IncomeCalculator {
     }
 
     public IncomeCalculator(String itemDescription){
-        String fileWithPathname = "C:\\dev\\Data\\BL.xlsx";
-        ingestExcel balanceSheet = new ingestExcel(fileWithPathname);
+        String fileWithPathname = "C:\\dev\\Data\\ChartOfAccounts.xlsx";
+        ingestChartOfAcctsExcel balanceSheet = new ingestChartOfAcctsExcel(fileWithPathname);
 
-        bsheetElements[] bsheetElementsList;
-        bsheetElementsList = balanceSheet.transferData();
-        for (int i = 0; i < bsheetElements.numofElements; i++){
-            if(bsheetElementsList[i].subType.equals("Salary") && bsheetElementsList[i].itemDescription.equals(itemDescription)) {
-                this.annualSalary = bsheetElementsList[i].cashValue;
+        ChartOfAccounts[] chartOfAccountsList;
+        chartOfAccountsList = balanceSheet.transferData();
+        for (int i = 0; i < ChartOfAccounts.numofElements; i++){
+            if(chartOfAccountsList[i].subType.equals("Salary") && chartOfAccountsList[i].itemDescription.equals(itemDescription)) {
+                this.annualSalary = chartOfAccountsList[i].cashValue;
             }
             professionalTax = 2496.0D;
             houseLoanInt = 200000.0D;

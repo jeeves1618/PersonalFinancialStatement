@@ -1,7 +1,9 @@
 package BalanceSheet;
 
+import java.util.Scanner;
+
 class buildBalanceSheetTest {
-    /*
+
     public static void main(String[] args) {
         double monthlyTakeHomeOne;
         double monthlyTakeHomeTwo;
@@ -11,7 +13,7 @@ class buildBalanceSheetTest {
         monthlyTakeHomeOne = scan.nextDouble();
         System.out.println("Please Enter Bun Monthly Income :");
         monthlyTakeHomeTwo = scan.nextDouble();
-        totalIncomeCalc T = new totalIncomeCalc(monthlyTakeHomeOne, monthlyTakeHomeTwo);
+        buildBalanceSheet T = new buildBalanceSheet(monthlyTakeHomeOne, monthlyTakeHomeTwo);
         System.out.println("Your total Monthly Incomes is : " + T.getIncomeTotalFmtd());
         System.out.println("Your monthly expenses are     : " + T.getMonthlyExpensesFmtd());
         System.out.println("Your net savings is           : " + T.getNetSavingsFmtd());
@@ -21,6 +23,4 @@ class buildBalanceSheetTest {
         //System.out.println("Your rental income 3 is       : " + T.getSurvivalDateFmtd());
         scan.close();
     }
-
-     */
 }

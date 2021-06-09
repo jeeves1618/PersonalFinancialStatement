@@ -1,7 +1,7 @@
 package IngestionEngine;
 
 import CommonModules.RupeeFormatter;
-import CommonModules.bsheetElements;
+import CommonModules.ChartOfAccounts;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,11 +11,11 @@ import java.text.DecimalFormat;
 
 public class IngestH2db{
     private static final String QUERY = "select BALTYPE ,BALSUBTYPE ,BALDESCCODE ,BALAMOUNT from BALSHEET where BALACTIVEIND = ?";
-    protected bsheetElements[] transferData() {
+    protected ChartOfAccounts[] transferData() {
         int bsIterator = 0;
         DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
         RupeeFormatter rf = new RupeeFormatter();
-        bsheetElements[] bsheetElementsList = new bsheetElements[100];
+        ChartOfAccounts[] chartOfAccountsList = new ChartOfAccounts[100];
 
         // Step 1: Establishing a Connection
         try (Connection connection = H2JDBCconnect.getConnection();
@@ -30,21 +30,21 @@ public class IngestH2db{
             // Step 4: Process the ResultSet object.
             while (rs.next()) {
                 //Instantiate an Object for each individual member of Array
-                bsheetElementsList[bsIterator] = new bsheetElements();
+                chartOfAccountsList[bsIterator] = new ChartOfAccounts();
 
-                bsheetElementsList[bsIterator].typeAssetOrLiability = rs.getString("BALTYPE");
-                bsheetElementsList[bsIterator].subType = rs.getString("BALSUBTYPE");
-                bsheetElementsList[bsIterator].itemDescription = rs.getString("BALDESCCODE");
-                bsheetElementsList[bsIterator].cashValue = rs.getDouble("BALAMOUNT");
-                bsheetElementsList[bsIterator].cashValueFmtd = rf.formattedRupee(ft.format(bsheetElementsList[bsIterator].cashValue));
+                chartOfAccountsList[bsIterator].typeAssetOrLiability = rs.getString("BALTYPE");
+                chartOfAccountsList[bsIterator].subType = rs.getString("BALSUBTYPE");
+                chartOfAccountsList[bsIterator].itemDescription = rs.getString("BALDESCCODE");
+                chartOfAccountsList[bsIterator].cashValue = rs.getDouble("BALAMOUNT");
+                chartOfAccountsList[bsIterator].cashValueFmtd = rf.formattedRupee(ft.format(chartOfAccountsList[bsIterator].cashValue));
                 bsIterator++;
             }
         } catch (SQLException e) {
             H2JDBCconnect.printSQLException(e);
         }
         // Return the array of data ingested from DB to the processing layer
-        bsheetElements.numofElements = bsIterator;
-        return bsheetElementsList;
+        ChartOfAccounts.numofElements = bsIterator;
+        return chartOfAccountsList;
     }
 
 }

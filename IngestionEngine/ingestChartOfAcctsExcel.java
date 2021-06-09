@@ -1,7 +1,7 @@
 package IngestionEngine;
 
 import CommonModules.RupeeFormatter;
-import CommonModules.bsheetElements;
+import CommonModules.ChartOfAccounts;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -12,17 +12,17 @@ import java.io.FileInputStream;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 
-public class ingestExcel{
+public class ingestChartOfAcctsExcel {
 
     private static String fileWithPathname;
     DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
     RupeeFormatter rf = new RupeeFormatter();
-    bsheetElements[] bsheetElementsList = new bsheetElements[100];
+    ChartOfAccounts[] chartOfAccountsList = new ChartOfAccounts[100];
 
-    public ingestExcel(String fileWithPathname){
+    public ingestChartOfAcctsExcel(String fileWithPathname){
         this.fileWithPathname = fileWithPathname;
     }
-    public bsheetElements[] transferData() {
+    public ChartOfAccounts[] transferData() {
         int bsIterator = 0;
         try {
             FileInputStream file=new FileInputStream(new File(fileWithPathname));
@@ -41,7 +41,7 @@ public class ingestExcel{
                 //For each row, iterate through all the columns
                 Iterator<Cell> cellIterator = row.cellIterator();
                 //Instantiate an Object for each indivial member of Array
-                bsheetElementsList[bsIterator] = new bsheetElements();
+                chartOfAccountsList[bsIterator] = new ChartOfAccounts();
 
                 while (cellIterator.hasNext())
                 {
@@ -53,10 +53,14 @@ public class ingestExcel{
                         case NUMERIC:
                             //System.out.print(cell.getNumericCellValue() + "t");
                             switch (cell.getColumnIndex()) {
-                                case 3:
-                                    bsheetElementsList[bsIterator].cashValue = cell.getNumericCellValue();
-                                    bsheetElementsList[bsIterator].cashValueFmtd = rf.formattedRupee(ft.format(bsheetElementsList[bsIterator].cashValue));
+                                case 4:
+                                    chartOfAccountsList[bsIterator].cashValue = cell.getNumericCellValue();
+                                    chartOfAccountsList[bsIterator].cashValueFmtd = rf.formattedRupee(ft.format(chartOfAccountsList[bsIterator].cashValue));
                                     //System.out.print(bsheetElementsList[bsIterator].cashValue + "t");
+                                    break;
+                                case 0:
+                                    chartOfAccountsList[bsIterator].identificationNumber = (int) cell.getNumericCellValue();
+                                    //System.out.print(bsheetElementsList[bsIterator].typeAssetOrLiability + "t");
                                     break;
                                 default:
                                     throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet");
@@ -65,16 +69,20 @@ public class ingestExcel{
                         case STRING:
                             //System.out.print(cell.getStringCellValue() + "t");
                             switch (cell.getColumnIndex()) {
-                                case 0:
-                                    bsheetElementsList[bsIterator].typeAssetOrLiability = cell.getStringCellValue();
+                                case 1:
+                                    chartOfAccountsList[bsIterator].typeAssetOrLiability = cell.getStringCellValue();
                                     //System.out.print(bsheetElementsList[bsIterator].typeAssetOrLiability + "t");
                                     break;
-                                case 1:
-                                    bsheetElementsList[bsIterator].subType = cell.getStringCellValue();
+                                case 2:
+                                    chartOfAccountsList[bsIterator].subType = cell.getStringCellValue();
                                     //System.out.print(bsheetElementsList[bsIterator].subType + "t");
                                     break;
-                                case 2:
-                                    bsheetElementsList[bsIterator].itemDescription = cell.getStringCellValue();
+                                case 3:
+                                    chartOfAccountsList[bsIterator].itemDescription = cell.getStringCellValue();
+                                    //System.out.print(bsheetElementsList[bsIterator].itemDescription + "t");
+                                    break;
+                                case 5:
+                                    chartOfAccountsList[bsIterator].financialStatement = cell.getStringCellValue();
                                     //System.out.print(bsheetElementsList[bsIterator].itemDescription + "t");
                                     break;
                                 default:
@@ -96,7 +104,7 @@ public class ingestExcel{
         {
             e.printStackTrace();
         }
-        bsheetElements.numofElements = bsIterator;
-        return bsheetElementsList;
+        ChartOfAccounts.numofElements = bsIterator;
+        return chartOfAccountsList;
     }
 }
