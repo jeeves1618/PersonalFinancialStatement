@@ -1,4 +1,4 @@
-package IncomeStatement;
+package CommonModules;
 
 public class AccountStatement{
     public static int numofElements;

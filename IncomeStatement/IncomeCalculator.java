@@ -120,6 +120,18 @@ public class IncomeCalculator {
         return rf.formattedRupee(ft.format(totalTax / 12.0));
     }
 
+    public double getGrossSalary(){
+        return (annualSalary *10 / 12.0);
+    }
+
+    public double getNetTakeHome(){
+        return monthlyTakeHome * 10;
+    }
+
+    public double getTotalTax(){
+        return (totalTax *10 / 12.0);
+    }
+
     public double getmonthlyTakeHome(){
         return monthlyTakeHome;
     }

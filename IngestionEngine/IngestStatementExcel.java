@@ -1,6 +1,6 @@
 package IngestionEngine;
 
-import IncomeStatement.AccountStatement;
+import CommonModules.AccountStatement;
 import CommonModules.RupeeFormatter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;

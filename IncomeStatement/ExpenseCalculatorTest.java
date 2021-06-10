@@ -1,5 +1,6 @@
 package IncomeStatement;
 
+import CommonModules.AccountStatement;
 import CommonModules.RupeeFormatter;
 
 import java.text.DecimalFormat;
@@ -11,8 +12,8 @@ public class ExpenseCalculatorTest {
         DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
         RupeeFormatter rf = new RupeeFormatter();
 
-        ExpenseCalculator e1 = new ExpenseCalculator("Ben", "Sal1");
-        ExpenseCalculator e2 = new ExpenseCalculator("Bun", "Sal1");
+        ExpenseCalculator e1 = new ExpenseCalculator("Two", "Sal1");
+        ExpenseCalculator e2 = new ExpenseCalculator("One", "Sal1");
         int numOfMonths = 10;
 
 

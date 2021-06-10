@@ -1,5 +1,6 @@
 package IncomeStatement;
 
+import CommonModules.AccountStatement;
 import CommonModules.RupeeFormatter;
 
 import java.text.DecimalFormat;
@@ -240,16 +241,10 @@ public class ExpenseCalculator {
         }
         System.out.println("Based on the data from " + transactionDateLow + " to " + transactionDateHigh);
         monthsBetween = ChronoUnit.MONTHS.between(transactionDateLow,transactionDateHigh) + 1;
-
-        if(accountType.equals("Sal1") && accountHolder.equals("Bun")){
-            // Subtracting for Cots, ChimneyHob, TV, Mattress
-            creditCardBill = creditCardBill - (93673 + 27700 + 62000 + 15000);
-            totalInvestment = totalInvestment + 93673 + 27700 + 62000 + 15000;
-        }
     }
 
     public String getTimePeriod(){
-        return ("From " + transactionDateLow + " to " + transactionDateHigh);
+        return ("For the period " + transactionDateLow + " through " + transactionDateHigh);
     }
     public double getTotalSavings(){
         return totalSavings/monthsBetween;
