@@ -14,7 +14,7 @@ public class ExpenseCalculatorTest {
 
         ExpenseCalculator e1 = new ExpenseCalculator("Two", "Sal1");
         ExpenseCalculator e2 = new ExpenseCalculator("One", "Sal1");
-        int numOfMonths = 10;
+        int numOfMonths = 1;
 
 
         System.out.println("Ben Income      : " + rf.formattedRupee(ft.format(e1.getTotalIncome())));

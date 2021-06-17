@@ -1,7 +1,9 @@
 package IncomeStatement;
 
 import CommonModules.AccountStatement;
+import CommonModules.NaturalLanguageProcessor;
 import CommonModules.RupeeFormatter;
+import IngestionEngine.IngestNLPExcel;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -58,6 +60,13 @@ public class ExpenseCalculator {
 
         ArrayList<AccountStatement> AccountStatementList;
         AccountStatementList = balanceSheet.transferData();
+
+        //Read the NLP Tokens from the spreadsheet
+        String tokenFileWithPathname = "C:\\dev\\Data\\NLP.xlsx";
+        IngestNLPExcel tokenizer = new IngestNLPExcel(tokenFileWithPathname);
+        ArrayList<NaturalLanguageProcessor> tokenDescriptionMapper;
+        tokenDescriptionMapper = tokenizer.transferData();
+
         for (int i=0; i < AccountStatement.numofElements; i++){
             String transactionRemarks = AccountStatementList.get(i).transactionRemarks;
 
@@ -67,180 +76,99 @@ public class ExpenseCalculator {
             if (transactionDateLow.isAfter(transactionDate))
                 transactionDateLow = transactionDate;
 
-            if(transactionRemarks.contains("INF/INFT/") && transactionRemarks.contains("/Self") && accountType.contains("Sal")) {
-                AccountStatementList.get(i).entryCategory = "Savings";
-                totalSavings = totalSavings + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount;
-                totalDeposits = totalDeposits + AccountStatementList.get(i).depositAmount;
-            } else
-            if(transactionRemarks.contains("BIL/INFT/") && transactionRemarks.toUpperCase().contains("RENT")) {
-                rentalIncome = rentalIncome + AccountStatementList.get(i).depositAmount;
-                totalDeposits = totalDeposits + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Rental Income";
-            } else
-            if(transactionRemarks.toUpperCase().contains("EBA/NSDL CDSL CHG") || transactionRemarks.toUpperCase().contains("DP CHGS TILL")) {
-                brokerageMaintenance = brokerageMaintenance + AccountStatementList.get(i).withdrawalAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount;
-                AccountStatementList.get(i).entryCategory = "Brokerage Maintenance";
-            } else
-            if((transactionRemarks.contains("BIL/INFT/") || transactionRemarks.contains("MMT/IMPS/")
-                    || transactionRemarks.contains("NEFT-") || transactionRemarks.contains("BIL/NEFT"))&&
-                    (transactionRemarks.toUpperCase().contains("KANNAN") ||
-                    transactionRemarks.toUpperCase().contains("CHANDRA") ||
-                    transactionRemarks.toUpperCase().contains("DHEEPIKA") || transactionRemarks.toUpperCase().contains("DHEEPS") ||
-                    transactionRemarks.toUpperCase().contains("AMMA") ||
-                    transactionRemarks.toUpperCase().contains("NANA"))) {
-                forFamily = forFamily + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                totalDeposits = totalDeposits + AccountStatementList.get(i).depositAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount;
-                AccountStatementList.get(i).entryCategory = "Family";
-            }else
-            if((transactionRemarks.contains("MMT/IMPS/") || (transactionRemarks.contains("BIL/NEFT/")))&&
-                    (transactionRemarks.contains("NithyaForBosch") ||
-                            transactionRemarks.contains("NithyaMPure") ||
-                            transactionRemarks.contains("NithyaFridge") ||
-                            transactionRemarks.contains("VijayHiranandan/ATLANTURE") ||
-                            transactionRemarks.contains("VijayHiranandai/ATLANTURE") ||
-                            transactionRemarks.contains("VijayAmafiGrill/Prasanna") ||
-                            transactionRemarks.contains("NithyaDishWashe")))
-                            {
-                totalInvestment = totalInvestment + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                totalDeposits = totalDeposits + AccountStatementList.get(i).depositAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount;
-                AccountStatementList.get(i).entryCategory = "Investments";
-            } else
-            if((transactionRemarks.contains("BIL/INFT/") && transactionRemarks.toUpperCase().contains("EMI"))
-                    || transactionRemarks.toUpperCase().contains("ACH/HDFCLTD")
-                    || transactionRemarks.toUpperCase().contains("CLG/HDFC LTD")
-                    || transactionRemarks.toUpperCase().contains("ACH/LIC HOUSING FINANCE")
-                    || transactionRemarks.contains("BIL/NEFT/") && transactionRemarks.toUpperCase().contains("EMI")){
-                monthlyEMI = monthlyEMI + AccountStatementList.get(i).withdrawalAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount;
-                AccountStatementList.get(i).entryCategory = "Monthly EMI";
-            } else
-            if(transactionRemarks.contains("Rev Sweep From") || transactionRemarks.toUpperCase().contains("AUTOSWEEP")){
-                AccountStatementList.get(i).entryCategory = "Bookentries";
-            } else
-            if(transactionRemarks.contains("ATM") || transactionRemarks.toUpperCase().contains("CASH WDL")){
-                cashWithdrawals = cashWithdrawals + AccountStatementList.get(i).withdrawalAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Cash Withdrawals";
-            } else
-            if((transactionRemarks.contains("State Bank/SBCOLLECT")) || (transactionRemarks.contains("Join Associatio")) ||
-            (transactionRemarks.toUpperCase().contains("BIL/ONL/") && transactionRemarks.toUpperCase().contains("3FIVE8 TEC"))
-            ){
-                apartmentMaintenance = apartmentMaintenance + AccountStatementList.get(i).withdrawalAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Apartment Maintenance";
-            } else
-            if(transactionRemarks.contains("BIL/ONL/") && transactionRemarks.toUpperCase().contains("EB")){
-                electricityBill = electricityBill + AccountStatementList.get(i).withdrawalAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Electricity Expenses";
-            }  else
-            if ((transactionRemarks.contains("BIL/ONL/") && transactionRemarks.toUpperCase().contains("BB DAILY")) ||
-            (transactionRemarks.contains("VPS") && transactionRemarks.toUpperCase().contains("NILGIRIS")) ||
-                    (transactionRemarks.toUpperCase().contains("RADHA BUT")) ||
-                    (transactionRemarks.toUpperCase().contains("HILSON HEA"))
-            ) {
-                groceries = groceries + AccountStatementList.get(i).withdrawalAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Groceries";
-            } else
-            if(transactionRemarks.contains("Closure Proceeds") || transactionRemarks.toUpperCase().contains("INT.COLL")
-                || transactionRemarks.toUpperCase().contains("INT.PD:")){
-                interestIncome = interestIncome + AccountStatementList.get(i).depositAmount + AccountStatementList.get(i).withdrawalAmount;
-                totalDeposits = totalDeposits - AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Interest Income";
-            } else
-            if(transactionRemarks.toUpperCase().contains("SBI LIFE INSURANCE COMPANY LTD")){
-                saleProceeds = saleProceeds + AccountStatementList.get(i).depositAmount;
-                totalDeposits = totalDeposits - AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Sale Proceeds";
+            totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount;
+            totalDeposits = totalDeposits + AccountStatementList.get(i).depositAmount;
+
+            for (int j=0; j < NaturalLanguageProcessor.numofElements; j++){
+                if(transactionRemarks.toUpperCase().contains(tokenDescriptionMapper.get(j).tokenizedWord)){
+                    AccountStatementList.get(i).entryCategory = tokenDescriptionMapper.get(j).entryCategory;
+                    break;
+                }
             }
-            else
-            if(transactionRemarks.toUpperCase().contains("ICICI BANK CREDIT")){
-                creditCardBill = creditCardBill + AccountStatementList.get(i).withdrawalAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Credit Card Bills";
-            } else
-            if(transactionRemarks.toUpperCase().contains("UNNAMALAI")){
-                housekeepingExpenses = housekeepingExpenses + AccountStatementList.get(i).withdrawalAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "House Keeping";
-            } else
-            if(transactionRemarks.toUpperCase().contains("NETFLIX") || transactionRemarks.toUpperCase().contains("CAKE")
-               || transactionRemarks.toUpperCase().contains("NITHYA2705")){
-                entertainmentExpenses = entertainmentExpenses + AccountStatementList.get(i).withdrawalAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Entertainment";
-            } else
-            if ((transactionRemarks.contains("NEFT") && transactionRemarks.toUpperCase().contains("BNY MELLON"))
-                || transactionRemarks.toUpperCase().contains("SALARY")){
-                salaryIncome = salaryIncome + AccountStatementList.get(i).depositAmount;
-                totalDeposits = totalDeposits + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Salary";
-            } else
-            if(transactionRemarks.toUpperCase().contains("AMALFI2705/HIRANANDAN/UTIB00") || transactionRemarks.toUpperCase().contains("DTAX")
-                    || transactionRemarks.toUpperCase().contains("/RDGOTN")
-                    || transactionRemarks.toUpperCase().contains("AMALFI")
-                    || transactionRemarks.toUpperCase().contains("/TNREGOTHDRC")
-                    || transactionRemarks.toUpperCase().contains("/REAL VALUE")){
-                totalInvestment = totalInvestment + AccountStatementList.get(i).withdrawalAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Investments";
-            } else
-            if(transactionRemarks.toUpperCase().contains("IRCTC") ){
-                travelExpenses = travelExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Travel Expenses";
-            } else
-            if(transactionRemarks.contains("CMS/ SBIDIV") || transactionRemarks.toUpperCase().contains("DIVIDEND")
-                    || transactionRemarks.toUpperCase().contains("ACH/")){
-                dividendIncome = dividendIncome + AccountStatementList.get(i).depositAmount;
-                totalDeposits = totalDeposits + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Dividend Income";
-            } else
-            if (((transactionRemarks.contains("EBA/NSE")) && AccountStatementList.get(i).withdrawalAmount > 0) ||
-                    (transactionRemarks.contains("BIL/ONL/") && transactionRemarks.toUpperCase().contains("/ZERODHA") && AccountStatementList.get(i).withdrawalAmount > 0))    {
-                totalBuyTrades = totalBuyTrades + AccountStatementList.get(i).withdrawalAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Buy Trades";
-            } else
-            if (((transactionRemarks.contains("EBA/NSE")) && AccountStatementList.get(i).depositAmount > 0) ||
-                    (transactionRemarks.contains("NEFT-") && transactionRemarks.toUpperCase().contains("FUND REDN")) ||
-                    (transactionRemarks.contains("NEFT-") && transactionRemarks.toUpperCase().contains("ZERODHA BROKING") && AccountStatementList.get(i).depositAmount > 0)) {
-                totalSellTrades = totalSellTrades + AccountStatementList.get(i).depositAmount;
-                totalDeposits = totalDeposits + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Sell Trades";
-            } else
-            if ((transactionRemarks.contains("BIL/INFT/")) && AccountStatementList.get(i).withdrawalAmount > 0) {
-                transferOut = transferOut + AccountStatementList.get(i).withdrawalAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Transfer Out";
-            } else
-            if ((transactionRemarks.contains("BIL/INFT/")) && AccountStatementList.get(i).depositAmount > 0) {
-                transferIn = transferIn + AccountStatementList.get(i).depositAmount;
-                totalDeposits = totalDeposits + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Transfer In";
-            } else
-            if(transactionRemarks.toUpperCase().contains("VPS/") || transactionRemarks.toUpperCase().contains("IPS/")
-                    || (transactionRemarks.toUpperCase().contains("BIL/ONL/") && !transactionRemarks.toUpperCase().contains("3FIVE8 TEC"))
-                    || transactionRemarks.toUpperCase().contains("BIL/REV PMT ID")) {
-                shoppingEatout = shoppingEatout + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                totalDeposits = totalDeposits + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Shopping and Eatout";
-            }  else {
-                Unknown = Unknown + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                AccountStatementList.get(i).entryCategory = "Unknown";
-                AccountStatement unknownEntry = new AccountStatement();
-                unknownEntry = AccountStatementList.get(i);
-                unknownList.add(unknownEntry);
+
+            if (AccountStatementList.get(i).entryCategory == null){
+                AccountStatementList.get(i).entryCategory = "Default";
+                System.out.println("AccountStatementList.get(i).entryCategory: " + AccountStatementList.get(i).entryCategory + transactionRemarks);
+            }
+            switch (AccountStatementList.get(i).entryCategory) {
+                case "Savings":
+                    totalSavings = totalSavings + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                    break;
+                case "Rental Income":
+                    rentalIncome = rentalIncome + AccountStatementList.get(i).depositAmount;
+                    break;
+                case "Brokerage Maintenance":
+                    brokerageMaintenance = brokerageMaintenance + AccountStatementList.get(i).withdrawalAmount;
+                    break;
+                case "Family":
+                    forFamily = forFamily + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                    break;
+                case "Monthly EMI":
+                    monthlyEMI = monthlyEMI + AccountStatementList.get(i).withdrawalAmount;
+                    break;
+                case "Bookentries":
+                    break;
+                case "Cash Withdrawals":
+                    cashWithdrawals = cashWithdrawals + AccountStatementList.get(i).withdrawalAmount;
+                    break;
+                case "Apartment Maintenance":
+                    apartmentMaintenance = apartmentMaintenance + AccountStatementList.get(i).withdrawalAmount;
+                    break;
+                case "Electricity Expenses":
+                    electricityBill = electricityBill + AccountStatementList.get(i).withdrawalAmount;
+                    break;
+                case "Groceries":
+                    groceries = groceries + AccountStatementList.get(i).withdrawalAmount;
+                    break;
+                case "Interest Income":
+                    interestIncome = interestIncome + AccountStatementList.get(i).depositAmount - AccountStatementList.get(i).withdrawalAmount;
+                    break;
+                case "Sale Proceeds":
+                    saleProceeds = saleProceeds + AccountStatementList.get(i).depositAmount;
+                    break;
+                case "Credit Card Bills":
+                    creditCardBill = creditCardBill + AccountStatementList.get(i).withdrawalAmount;
+                    break;
+                case "House Keeping":
+                    housekeepingExpenses = housekeepingExpenses + AccountStatementList.get(i).withdrawalAmount;
+                    break;
+                case "Entertainment":
+                    entertainmentExpenses = entertainmentExpenses + AccountStatementList.get(i).withdrawalAmount;
+                    break;
+                case "Salary":
+                    salaryIncome = salaryIncome + AccountStatementList.get(i).depositAmount;
+                    break;
+                case "Investments":
+                    totalInvestment = totalInvestment + AccountStatementList.get(i).withdrawalAmount;
+                    break;
+                case "Travel Expenses":
+                    travelExpenses = travelExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                    break;
+                case "Dividend Income":
+                    dividendIncome = dividendIncome + AccountStatementList.get(i).depositAmount;
+                    break;
+                case "Capital Market Transactions":
+                    totalBuyTrades = totalBuyTrades + AccountStatementList.get(i).withdrawalAmount;
+                    totalSellTrades = totalSellTrades + AccountStatementList.get(i).depositAmount;
+                    break;
+                case "Shopping and Eatout":
+                    shoppingEatout = shoppingEatout + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                    break;
+                default:
+                    Unknown = Unknown + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
+                    AccountStatementList.get(i).entryCategory = "Unknown";
+                    AccountStatement unknownEntry = new AccountStatement();
+                    unknownEntry = AccountStatementList.get(i);
+                    unknownList.add(unknownEntry);
             }
         }
         System.out.println("Based on the data from " + transactionDateLow + " to " + transactionDateHigh);
         monthsBetween = ChronoUnit.MONTHS.between(transactionDateLow,transactionDateHigh) + 1;
+        if(accountType.equals("Sal1") && accountHolder.equals("One")){
+            // Subtracting for Cots, ChimneyHob, TV, Mattress
+            creditCardBill = creditCardBill - (93673 + 27700 + 62000 + 15000);
+            totalInvestment = totalInvestment + 93673 + 27700 + 62000 + 15000;
+        }
     }
 
     public String getTimePeriod(){

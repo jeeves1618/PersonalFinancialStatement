@@ -46,7 +46,7 @@ public class buildBalanceSheet {
             if(chartOfAccountsList[i].subType.equals("Rent") && chartOfAccountsList[i].itemDescription.equals("RentalIncome1")) {
                 this.rentalIncomeOne = chartOfAccountsList[i].cashValue;
             } else
-            if(chartOfAccountsList[i].subType.equals("EMI")) {
+            if(chartOfAccountsList[i].itemDescription.equals("Residential Loan EMI")) {
                 monthlyEMI = (chartOfAccountsList[i].cashValue/12) + monthlyEMI;
                 totalCurrentLiabilities = totalCurrentLiabilities + chartOfAccountsList[i].cashValue;
             }else
