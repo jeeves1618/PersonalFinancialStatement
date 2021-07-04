@@ -36,6 +36,7 @@ public class ExpenseCalculator {
     private double forFamily;
     private double groceries;
     private double entertainmentExpenses;
+    private double educationExpenses;
     private double housekeepingExpenses;
     private double totalSellTrades;
     private double totalBuyTrades;
@@ -126,7 +127,7 @@ public class ExpenseCalculator {
                 case "Sale Proceeds":
                     saleProceeds = saleProceeds + AccountStatementList.get(i).depositAmount;
                     break;
-                case "Credit Card Bills":
+                case "Miscellaneous":
                     creditCardBill = creditCardBill + AccountStatementList.get(i).withdrawalAmount;
                     break;
                 case "House Keeping":
@@ -154,6 +155,12 @@ public class ExpenseCalculator {
                 case "Shopping and Eatout":
                     shoppingEatout = shoppingEatout + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
                     break;
+                case "Insurance":
+                    homeInsurance = homeInsurance + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                    break;
+                case "Education":
+                    educationExpenses = educationExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                    break;
                 default:
                     Unknown = Unknown + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
                     AccountStatementList.get(i).entryCategory = "Unknown";
@@ -164,11 +171,6 @@ public class ExpenseCalculator {
         }
         System.out.println("Based on the data from " + transactionDateLow + " to " + transactionDateHigh);
         monthsBetween = ChronoUnit.MONTHS.between(transactionDateLow,transactionDateHigh) + 1;
-        if(accountType.equals("Sal1") && accountHolder.equals("One")){
-            // Subtracting for Cots, ChimneyHob, TV, Mattress
-            creditCardBill = creditCardBill - (93673 + 27700 + 62000 + 15000);
-            totalInvestment = totalInvestment + 93673 + 27700 + 62000 + 15000;
-        }
     }
 
     public String getTimePeriod(){
@@ -229,6 +231,9 @@ public class ExpenseCalculator {
     public double getEntertainmentExpenses(){
         return entertainmentExpenses/monthsBetween;
     }
+    public double getEducationExpenses(){
+        return educationExpenses/monthsBetween;
+    }
     public double getCashWithdrawals(){
         return cashWithdrawals/monthsBetween;
     }
@@ -277,13 +282,21 @@ public class ExpenseCalculator {
     public double getTotalExpenses(){
         return (apartmentMaintenance + electricityBill + creditCardBill
                 + brokerageMaintenance + homeInsurance + cashWithdrawals + groceries + travelExpenses + forFamily + shoppingEatout
-                + entertainmentExpenses + housekeepingExpenses + totalInvestment + monthlyEMI)/monthsBetween;
+                + entertainmentExpenses + housekeepingExpenses + totalInvestment + monthlyEMI + educationExpenses)/monthsBetween;
+    }
+    public double getTotalNonDiscretionExpenses(){
+        return (apartmentMaintenance + electricityBill + creditCardBill
+                + brokerageMaintenance + homeInsurance + cashWithdrawals + groceries + travelExpenses + forFamily + shoppingEatout
+                + entertainmentExpenses + housekeepingExpenses + educationExpenses);
     }
     public String getTotalExpensesFmtd(){
         return rf.formattedRupee(ft.format(this.getTotalExpenses()));
     }
     public double getUnknownAmt(){
         return Unknown;
+    }
+    public long getMonthsBetween(){
+        return monthsBetween;
     }
     public ArrayList<AccountStatement> getUnknownList(){
         return unknownList;

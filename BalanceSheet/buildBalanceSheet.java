@@ -1,10 +1,12 @@
 package BalanceSheet;
 
-import CommonModules.RupeeFormatter;
 import CommonModules.ChartOfAccounts;
+import CommonModules.RupeeFormatter;
+import IncomeStatement.ExpenseCalculator;
 import IngestionEngine.ingestChartOfAcctsExcel;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.time.LocalDate;
 
 public class buildBalanceSheet {
@@ -27,8 +29,10 @@ public class buildBalanceSheet {
 
     DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
     RupeeFormatter rf = new RupeeFormatter();
+    ExpenseCalculator e1 = new ExpenseCalculator("Two", "Sal1");
+    ExpenseCalculator e2 = new ExpenseCalculator("One", "Sal1");
 
-    public buildBalanceSheet(double monthlyTakeHomeOne, double monthlyTakeHomeTwo){
+    public buildBalanceSheet(double monthlyTakeHomeOne, double monthlyTakeHomeTwo) throws ParseException {
 
         this.monthlyTakeHomeOne = monthlyTakeHomeOne;
         this.monthlyTakeHomeTwo = monthlyTakeHomeTwo;
@@ -57,7 +61,9 @@ public class buildBalanceSheet {
                 this.rentalIncomeThree = chartOfAccountsList[i].cashValue;
             } else
             if(chartOfAccountsList[i].subType.equals("Account Payables") && chartOfAccountsList[i].itemDescription.equals("HouseHoldExpenses")) {
-                this.monthlyExpenses = chartOfAccountsList[i].cashValue/12;
+                chartOfAccountsList[i].cashValue = e1.getTotalNonDiscretionExpenses()+ e2.getTotalNonDiscretionExpenses();
+                chartOfAccountsList[i].cashValueFmtd = rf.formattedRupee(ft.format((e1.getTotalNonDiscretionExpenses()+ e2.getTotalNonDiscretionExpenses())/e1.getMonthsBetween()*12));
+                this.monthlyExpenses = chartOfAccountsList[i].cashValue/ e1.getMonthsBetween();
                 totalCurrentLiabilities = totalCurrentLiabilities + chartOfAccountsList[i].cashValue;
             } else
             if(chartOfAccountsList[i].subType.equals("Total Current Assets") && chartOfAccountsList[i].itemDescription.equals("Total Current Assets")) {
@@ -67,7 +73,7 @@ public class buildBalanceSheet {
             if(chartOfAccountsList[i].subType.equals("Current Assets") || chartOfAccountsList[i].subType.equals("Account Receivables")) {
                 totalCurrentAssets = totalCurrentAssets + chartOfAccountsList[i].cashValue;
             }  else
-            if(chartOfAccountsList[i].subType.equals("Current Liabilities") && chartOfAccountsList[i].itemDescription.equals("Current Liabilities")) {
+            if(chartOfAccountsList[i].subType.equals("Total Current Liabilities") && chartOfAccountsList[i].itemDescription.equals("Current Liabilities")) {
                 chartOfAccountsList[i].cashValue = totalCurrentLiabilities;
                 chartOfAccountsList[i].cashValueFmtd = rf.formattedRupee(ft.format(chartOfAccountsList[i].cashValue));
             }else
@@ -75,7 +81,7 @@ public class buildBalanceSheet {
                     chartOfAccountsList[i].subType.equals("Account Payables")) {
                 totalCurrentLiabilities = totalCurrentLiabilities + chartOfAccountsList[i].cashValue;
             }else
-            if(chartOfAccountsList[i].subType.equals("Non Current Liabilities") && chartOfAccountsList[i].itemDescription.equals("Non Current Liabilities")) {
+            if(chartOfAccountsList[i].subType.equals("Total Non Current Liabilities") && chartOfAccountsList[i].itemDescription.equals("Non Current Liabilities")) {
                 chartOfAccountsList[i].cashValue = totalNonCurrentLiabilities;
                 chartOfAccountsList[i].cashValueFmtd = rf.formattedRupee(ft.format(chartOfAccountsList[i].cashValue));
             }else
@@ -121,10 +127,15 @@ public class buildBalanceSheet {
         return rf.formattedRupee(ft.format(totalCurrentLiabilities + totalNonCurrentLiabilities));
     }
     public String getTotalAssetsFmtd(){
+        System.out.println(totalCurrentAssets);
+        System.out.println(totalNonCurrentAssets);
         return rf.formattedRupee(ft.format(totalCurrentAssets + totalNonCurrentAssets));
     }
     public String getNetWorthFmtd(){
         return rf.formattedRupee(ft.format(totalCurrentAssets + totalNonCurrentAssets - totalCurrentLiabilities - totalNonCurrentLiabilities));
+    }
+    public String getCurrentNetWorthFmtd(){
+        return rf.formattedRupee(ft.format(totalCurrentAssets - totalCurrentLiabilities));
     }
     public String getSurvivalDateFmtd(){
         survivalDate =  LocalDate.now().plusDays(Math.round((totalCurrentAssets)*365/totalCurrentLiabilities));
