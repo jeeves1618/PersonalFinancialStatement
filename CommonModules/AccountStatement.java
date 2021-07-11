@@ -14,6 +14,7 @@ public class AccountStatement{
     public String depositAmountFmtd;
     public String balanceAmountFmtd;
     public String entryCategory;
+    public int numofInstanceElements;
 
     public AccountStatement(){
         this.valueDate = "23/09/1980";

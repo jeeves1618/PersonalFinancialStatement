@@ -51,6 +51,8 @@ public class ExpenseCalculator {
     DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
     RupeeFormatter rf = new RupeeFormatter();
     ArrayList<AccountStatement> unknownList = new ArrayList<>();
+    ArrayList<AccountStatement> requestedList = new ArrayList<>();
+    ArrayList<AccountStatement> AccountStatementList;
 
     public ExpenseCalculator(String accountHolder, String accountType) throws ParseException {
 
@@ -59,7 +61,6 @@ public class ExpenseCalculator {
         IngestionEngine.IngestStatementExcel balanceSheet = new IngestionEngine.IngestStatementExcel(fileWithPathname);
         //IngestH2db balanceSheet = new IngestH2db();
 
-        ArrayList<AccountStatement> AccountStatementList;
         AccountStatementList = balanceSheet.transferData();
 
         //Read the NLP Tokens from the spreadsheet
@@ -110,7 +111,7 @@ public class ExpenseCalculator {
                 case "Bookentries":
                     break;
                 case "Cash Withdrawals":
-                    cashWithdrawals = cashWithdrawals + AccountStatementList.get(i).withdrawalAmount;
+                    cashWithdrawals = cashWithdrawals + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
                     break;
                 case "Apartment Maintenance":
                     apartmentMaintenance = apartmentMaintenance + AccountStatementList.get(i).withdrawalAmount;
@@ -300,5 +301,14 @@ public class ExpenseCalculator {
     }
     public ArrayList<AccountStatement> getUnknownList(){
         return unknownList;
+    }
+    public ArrayList<AccountStatement> getPayables(String entryCategory){
+        AccountStatement requestedEntry = new AccountStatement();
+
+        for (int i=0; i < AccountStatement.numofElements; i++) {
+            requestedEntry = AccountStatementList.get(i);
+            requestedList.add(requestedEntry);
+        }
+        return requestedList;
     }
 }
