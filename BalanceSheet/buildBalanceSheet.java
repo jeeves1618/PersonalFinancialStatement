@@ -23,6 +23,7 @@ public class buildBalanceSheet {
     private double totalNonCurrentAssets;
     public double totalCurrentLiabilities;
     private double totalNonCurrentLiabilities;
+    private double totalLiquidAssets;
 
     public ChartOfAccounts[] chartOfAccountsList;
     private LocalDate survivalDate;
@@ -47,6 +48,11 @@ public class buildBalanceSheet {
 
         chartOfAccountsList = balanceSheet.transferData();
         for (int i = 0; i < ChartOfAccounts.numofElements; i++){
+
+            if (chartOfAccountsList[i].isAssetLiquidInd.equals("Y")) {
+                totalLiquidAssets = totalLiquidAssets + chartOfAccountsList[i].cashValue;
+            }
+
             if(chartOfAccountsList[i].subType.equals("Rent") && chartOfAccountsList[i].itemDescription.equals("RentalIncome1")) {
                 this.rentalIncomeOne = chartOfAccountsList[i].cashValue;
             } else
@@ -140,6 +146,12 @@ public class buildBalanceSheet {
     public String getSurvivalDateFmtd(){
         survivalDate =  LocalDate.now().plusDays(Math.round((totalCurrentAssets)*365/totalCurrentLiabilities));
         return survivalDate.toString();
+    }
+    public double getTotalLiquidAssets(){
+        return totalLiquidAssets;
+    }
+    public double getNetSavings(){
+        return netSavings;
     }
 }
 

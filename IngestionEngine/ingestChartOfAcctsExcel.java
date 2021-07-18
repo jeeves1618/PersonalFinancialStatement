@@ -85,6 +85,10 @@ public class ingestChartOfAcctsExcel {
                                     chartOfAccountsList[bsIterator].financialStatement = cell.getStringCellValue();
                                     //System.out.print(bsheetElementsList[bsIterator].itemDescription + "t");
                                     break;
+                                case 6:
+                                    chartOfAccountsList[bsIterator].isAssetLiquidInd = cell.getStringCellValue();
+                                    //System.out.print(bsheetElementsList[bsIterator].itemDescription + "t");
+                                    break;
                                 default:
                                     throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet");
                             }

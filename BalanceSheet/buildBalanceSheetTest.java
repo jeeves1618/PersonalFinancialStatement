@@ -1,6 +1,7 @@
 package BalanceSheet;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 class buildBalanceSheetTest {
@@ -11,9 +12,11 @@ class buildBalanceSheetTest {
         Scanner scan = new Scanner(System.in);
 
         System.out.println("Please Enter Ben Monthly Income :");
-        monthlyTakeHomeOne = scan.nextDouble();
+
+        monthlyTakeHomeOne = 100;
+
         System.out.println("Please Enter Bun Monthly Income :");
-        monthlyTakeHomeTwo = scan.nextDouble();
+        monthlyTakeHomeTwo = 200;
         buildBalanceSheet T = new buildBalanceSheet(monthlyTakeHomeOne, monthlyTakeHomeTwo);
         System.out.println("Your total Monthly Incomes is : " + T.getIncomeTotalFmtd());
         System.out.println("Your monthly expenses are     : " + T.getMonthlyExpensesFmtd());
@@ -22,7 +25,9 @@ class buildBalanceSheetTest {
         System.out.println("Your rental income 2 is       : " + T.totalCurrentAssets);
         System.out.println("Your rental income 3 is       : " + T.getMonthlyEMIFmtd());
         System.out.println("Our total assets is           : " + T.getTotalAssetsFmtd());
-        //System.out.println("Your rental income 3 is       : " + T.getSurvivalDateFmtd());
+        System.out.println("Our total liquid asset        : " + T.getTotalLiquidAssets());
+        System.out.println(LocalDate.now().plusMonths(10));
+
         scan.close();
     }
 }

@@ -16,6 +16,7 @@ public class ChartOfAccounts {
     public double cashValue;
     public String cashValueFmtd;
     public String financialStatement;
+    public String isAssetLiquidInd;
 
     public ChartOfAccounts(){
         this.typeAssetOrLiability = "typeAssetOrLiability";
