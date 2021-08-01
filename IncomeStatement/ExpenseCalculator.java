@@ -40,9 +40,11 @@ public class ExpenseCalculator {
     private double housekeepingExpenses;
     private double totalSellTrades;
     private double totalBuyTrades;
+    private double dLearningExpenses;
+    private double healthCareExpenses;
     private double Unknown;
     long monthsBetween;
-    private LocalDate transactionDateHigh = LocalDate.parse("0001-01-01");
+    private static LocalDate transactionDateHigh = LocalDate.parse("0001-01-01");
     private LocalDate transactionDateLow  = LocalDate.parse("9999-12-31");
     //private LocalDate transactionDate;
 
@@ -69,14 +71,18 @@ public class ExpenseCalculator {
         ArrayList<NaturalLanguageProcessor> tokenDescriptionMapper;
         tokenDescriptionMapper = tokenizer.transferData();
 
-        for (int i=0; i < AccountStatement.numofElements; i++){
-            String transactionRemarks = AccountStatementList.get(i).transactionRemarks;
+        for (int i=0; i < AccountStatement.numofElements; i++) {
 
             LocalDate transactionDate = LocalDate.parse(AccountStatementList.get(i).transactionDate, formatter);
             if (transactionDateHigh.isBefore(transactionDate))
                 transactionDateHigh = transactionDate;
             if (transactionDateLow.isAfter(transactionDate))
                 transactionDateLow = transactionDate;
+        }
+
+        transactionDateLow = transactionDateHigh.minusYears(1l).plusDays(1l);
+        for (int i=0; i < AccountStatement.numofElements; i++){
+            String transactionRemarks = AccountStatementList.get(i).transactionRemarks;
 
             totalWithdrawals = totalWithdrawals + AccountStatementList.get(i).withdrawalAmount;
             totalDeposits = totalDeposits + AccountStatementList.get(i).depositAmount;
@@ -92,82 +98,94 @@ public class ExpenseCalculator {
                 AccountStatementList.get(i).entryCategory = "Default";
                 System.out.println("AccountStatementList.get(i).entryCategory: " + AccountStatementList.get(i).entryCategory + transactionRemarks);
             }
-            switch (AccountStatementList.get(i).entryCategory) {
-                case "Savings":
-                    totalSavings = totalSavings + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                    break;
-                case "Rental Income":
-                    rentalIncome = rentalIncome + AccountStatementList.get(i).depositAmount;
-                    break;
-                case "Brokerage Maintenance":
-                    brokerageMaintenance = brokerageMaintenance + AccountStatementList.get(i).withdrawalAmount;
-                    break;
-                case "Family":
-                    forFamily = forFamily + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                    break;
-                case "Monthly EMI":
-                    monthlyEMI = monthlyEMI + AccountStatementList.get(i).withdrawalAmount;
-                    break;
-                case "Bookentries":
-                    break;
-                case "Cash Withdrawals":
-                    cashWithdrawals = cashWithdrawals + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                    break;
-                case "Apartment Maintenance":
-                    apartmentMaintenance = apartmentMaintenance + AccountStatementList.get(i).withdrawalAmount;
-                    break;
-                case "Electricity Expenses":
-                    electricityBill = electricityBill + AccountStatementList.get(i).withdrawalAmount;
-                    break;
-                case "Groceries":
-                    groceries = groceries + AccountStatementList.get(i).withdrawalAmount;
-                    break;
-                case "Interest Income":
-                    interestIncome = interestIncome + AccountStatementList.get(i).depositAmount - AccountStatementList.get(i).withdrawalAmount;
-                    break;
-                case "Sale Proceeds":
-                    saleProceeds = saleProceeds + AccountStatementList.get(i).depositAmount;
-                    break;
-                case "Miscellaneous":
-                    creditCardBill = creditCardBill + AccountStatementList.get(i).withdrawalAmount;
-                    break;
-                case "House Keeping":
-                    housekeepingExpenses = housekeepingExpenses + AccountStatementList.get(i).withdrawalAmount;
-                    break;
-                case "Entertainment":
-                    entertainmentExpenses = entertainmentExpenses + AccountStatementList.get(i).withdrawalAmount;
-                    break;
-                case "Salary":
-                    salaryIncome = salaryIncome + AccountStatementList.get(i).depositAmount;
-                    break;
-                case "Investments":
-                    totalInvestment = totalInvestment + AccountStatementList.get(i).withdrawalAmount;
-                    break;
-                case "Travel Expenses":
-                    travelExpenses = travelExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                    break;
-                case "Dividend Income":
-                    dividendIncome = dividendIncome + AccountStatementList.get(i).depositAmount;
-                    break;
-                case "Capital Market Transactions":
-                    totalBuyTrades = totalBuyTrades + AccountStatementList.get(i).withdrawalAmount;
-                    totalSellTrades = totalSellTrades + AccountStatementList.get(i).depositAmount;
-                    break;
-                case "Shopping and Eatout":
-                    shoppingEatout = shoppingEatout + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                    break;
-                case "Insurance":
-                    homeInsurance = homeInsurance + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                    break;
-                case "Education":
-                    educationExpenses = educationExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
-                    break;
-                default:
-                    Unknown = Unknown + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
-                    AccountStatementList.get(i).entryCategory = "Unknown";
-                    AccountStatement unknownEntry = new AccountStatement();
-                    unknownEntry = AccountStatementList.get(i);
-                    unknownList.add(unknownEntry);
+            LocalDate transactionDate = LocalDate.parse(AccountStatementList.get(i).transactionDate, formatter);
+            if (transactionDate.isBefore(transactionDateHigh.minusYears(1l).plusDays(1l))){
+                System.out.println("Before");
+            } else
+            {
+                switch (AccountStatementList.get(i).entryCategory) {
+                    case "Savings":
+                        totalSavings = totalSavings + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Rental Income":
+                        rentalIncome = rentalIncome + AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Brokerage Maintenance":
+                        brokerageMaintenance = brokerageMaintenance + AccountStatementList.get(i).withdrawalAmount;
+                        break;
+                    case "Family":
+                        forFamily = forFamily + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Monthly EMI":
+                        monthlyEMI = monthlyEMI + AccountStatementList.get(i).withdrawalAmount;
+                        break;
+                    case "Bookentries":
+                        break;
+                    case "Cash Withdrawals":
+                        cashWithdrawals = cashWithdrawals + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Apartment Maintenance":
+                        apartmentMaintenance = apartmentMaintenance + AccountStatementList.get(i).withdrawalAmount;
+                        break;
+                    case "Electricity Expenses":
+                        electricityBill = electricityBill + AccountStatementList.get(i).withdrawalAmount;
+                        break;
+                    case "Groceries":
+                        groceries = groceries + AccountStatementList.get(i).withdrawalAmount;
+                        break;
+                    case "Interest Income":
+                        interestIncome = interestIncome + AccountStatementList.get(i).depositAmount - AccountStatementList.get(i).withdrawalAmount;
+                        break;
+                    case "Sale Proceeds":
+                        saleProceeds = saleProceeds + AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Miscellaneous":
+                        creditCardBill = creditCardBill + AccountStatementList.get(i).withdrawalAmount;
+                        break;
+                    case "House Keeping":
+                        housekeepingExpenses = housekeepingExpenses + AccountStatementList.get(i).withdrawalAmount;
+                        break;
+                    case "Entertainment":
+                        entertainmentExpenses = entertainmentExpenses + AccountStatementList.get(i).withdrawalAmount;
+                        break;
+                    case "Salary":
+                        salaryIncome = salaryIncome + AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Investments":
+                        totalInvestment = totalInvestment + AccountStatementList.get(i).withdrawalAmount;
+                        break;
+                    case "Travel Expenses":
+                        travelExpenses = travelExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Dividend Income":
+                        dividendIncome = dividendIncome + AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Capital Market Transactions":
+                        totalBuyTrades = totalBuyTrades + AccountStatementList.get(i).withdrawalAmount;
+                        totalSellTrades = totalSellTrades + AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Shopping and Eatout":
+                        shoppingEatout = shoppingEatout + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Insurance":
+                        homeInsurance = homeInsurance + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Education":
+                        educationExpenses = educationExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Discretionary Learning":
+                        dLearningExpenses = dLearningExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        break;
+                    case "Healthcare and Fitness":
+                        healthCareExpenses = healthCareExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        break;
+                    default:
+                        Unknown = Unknown + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
+                        AccountStatementList.get(i).entryCategory = "Unknown";
+                        AccountStatement unknownEntry = new AccountStatement();
+                        unknownEntry = AccountStatementList.get(i);
+                        unknownList.add(unknownEntry);
+                }
             }
         }
         System.out.println("Based on the data from " + transactionDateLow + " to " + transactionDateHigh);
@@ -274,6 +292,12 @@ public class ExpenseCalculator {
     public double getTotalBuyTrades(){
         return totalBuyTrades/monthsBetween;
     }
+    public double getdLearningExpenses(){
+        return dLearningExpenses/monthsBetween;
+    }
+    public double getdHealthCareExpenses(){
+        return healthCareExpenses/monthsBetween;
+    }
     public double getTotalSellTrades(){
         return totalSellTrades/monthsBetween;
     }
@@ -283,12 +307,13 @@ public class ExpenseCalculator {
     public double getTotalExpenses(){
         return (apartmentMaintenance + electricityBill + creditCardBill
                 + brokerageMaintenance + homeInsurance + cashWithdrawals + groceries + travelExpenses + forFamily + shoppingEatout
-                + entertainmentExpenses + housekeepingExpenses + totalInvestment + monthlyEMI + educationExpenses)/monthsBetween;
+                + entertainmentExpenses + housekeepingExpenses + totalInvestment + monthlyEMI + educationExpenses + healthCareExpenses
+                + dLearningExpenses)/monthsBetween;
     }
     public double getTotalNonDiscretionExpenses(){
         return (apartmentMaintenance + electricityBill + creditCardBill
                 + brokerageMaintenance + homeInsurance + cashWithdrawals + groceries + travelExpenses + forFamily + shoppingEatout
-                + entertainmentExpenses + housekeepingExpenses + educationExpenses);
+                + entertainmentExpenses + housekeepingExpenses + educationExpenses + healthCareExpenses);
     }
     public String getTotalExpensesFmtd(){
         return rf.formattedRupee(ft.format(this.getTotalExpenses()));
@@ -306,8 +331,13 @@ public class ExpenseCalculator {
         AccountStatement requestedEntry = new AccountStatement();
 
         for (int i=0; i < AccountStatement.numofElements; i++) {
-            requestedEntry = AccountStatementList.get(i);
-            requestedList.add(requestedEntry);
+            LocalDate transactionDate = LocalDate.parse(AccountStatementList.get(i).transactionDate, formatter);
+            if (transactionDate.isBefore(transactionDateHigh.minusYears(1l).plusDays(1l))){
+                System.out.println("Before");
+            } else{
+                requestedEntry = AccountStatementList.get(i);
+                requestedList.add(requestedEntry);
+            }
         }
         return requestedList;
     }

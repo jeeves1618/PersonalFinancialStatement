@@ -45,7 +45,8 @@ public class ExpenseCalculatorTest {
         System.out.println("Shopping and Eat out : " + rf.formattedRupee(ft.format(((e1.getShoppingExpense() + e2.getShoppingExpense()) / numOfMonths))));
         System.out.println("Family               : " + rf.formattedRupee(ft.format(((e1.getFamilyExpenses() + e2.getFamilyExpenses()) / numOfMonths))));
         System.out.println("Brokerage            : " + rf.formattedRupee(ft.format(((e1.getTotalBrokerage() + e2.getTotalBrokerage()) / numOfMonths))));
-        System.out.println("Education Expenses            : " + rf.formattedRupee(ft.format(((e1.getEducationExpenses() + e2.getEducationExpenses()) / numOfMonths))));
+        System.out.println("Education Expenses   : " + rf.formattedRupee(ft.format(((e1.getEducationExpenses() + e2.getEducationExpenses()) / numOfMonths))));
+        System.out.println("Healthcare  Expenses : " + rf.formattedRupee(ft.format(((e1.getdHealthCareExpenses() + e2.getdHealthCareExpenses()) / numOfMonths))));
         System.out.println("Total Expenses       : " + rf.formattedRupee(ft.format(((e1.getTotalExpenses() + e2.getTotalExpenses()) / numOfMonths))));
         System.out.println(" ");
         System.out.println("Bun Expenses         : " + e1.getTotalExpensesFmtd());

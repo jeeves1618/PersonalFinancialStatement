@@ -74,7 +74,7 @@ public class IngestStatementExcel{
                                     //System.out.print(AccountStatementEntry.cashValue + "t");
                                     break;
                                 default:
-                                    throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet");
+                                    throw new IllegalStateException("Unexpected NUMERIC Cell Value in the Spreadsheet :" + bsIterator + " and " + cell.getColumnIndex());
                             }
                             break;
                         case STRING:
@@ -101,14 +101,14 @@ public class IngestStatementExcel{
                                     //System.out.print(AccountStatementEntry.itemDescription + "t");
                                     break;
                                 default:
-                                    throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet");
+                                    throw new IllegalStateException("Unexpected STRING Cell Value in the Spreadsheet :" + bsIterator + " and " + cell.getColumnIndex());
                             }
                             break;
                         case BLANK:
                             //System.out.print(cell.getStringCellValue() + "t");
                             break;
                         default:
-                            throw new IllegalStateException("Unexpected value: " + cell.getCellType());
+                            throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet :" + bsIterator + " and " + cell.getColumnIndex());
                     }
                 }
                 AccountStatementList.add(AccountStatementEntry);
