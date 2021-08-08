@@ -17,6 +17,8 @@ public class ViewPayablesDrilldown {
     private int numberOfEntries;
     ExpenseCalculator e1;
     ExpenseCalculator e2;
+    ExpenseCalculator e3;
+    ExpenseCalculator e4;
     ArrayList<AccountStatement> requestedList = new ArrayList<>();
 
     public ViewPayablesDrilldown(String entryCategory) {
@@ -43,6 +45,27 @@ public class ViewPayablesDrilldown {
             if (temp.entryCategory.equals(entryCategory)){
                 requestedList.add(temp);
                 numberOfEntries++;
+            }
+        }
+        if (this.entryCategory.equals("Dividend Income") || this.entryCategory.equals("Interest Income"))
+        {
+            e3 = new ExpenseCalculator("One", "Sav1");
+            requestIterator = e3.getPayables(entryCategory).listIterator();
+            while (requestIterator.hasNext()) {
+                temp = requestIterator.next();
+                if (temp.entryCategory.equals(entryCategory)){
+                    requestedList.add(temp);
+                    numberOfEntries++;
+                }
+            }
+            e4 = new ExpenseCalculator("Two", "Sav1");
+            requestIterator = e4.getPayables(entryCategory).listIterator();
+            while (requestIterator.hasNext()) {
+                temp = requestIterator.next();
+                if (temp.entryCategory.equals(entryCategory)){
+                    requestedList.add(temp);
+                    numberOfEntries++;
+                }
             }
         }
         return requestedList;
