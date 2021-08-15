@@ -15,6 +15,7 @@ public class AccountStatement{
     public String balanceAmountFmtd;
     public String entryCategory;
     public int numofInstanceElements;
+    public String discretionarySpendingIndicator;
 
     public AccountStatement(){
         this.valueDate = "23/09/1980";
@@ -24,5 +25,6 @@ public class AccountStatement{
         this.withdrawalAmount = 0;
         this.depositAmount = 0;
         this.balanceAmount = 0;
+        this.discretionarySpendingIndicator = "N";
     }
 }

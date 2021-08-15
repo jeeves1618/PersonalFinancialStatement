@@ -8,7 +8,7 @@ import java.util.ListIterator;
 public class ViewPayablesDrilldownTest {
     public static void main(String[] args)  throws ParseException {
         double totalWithdrawals = 0, totalDeposits = 0;
-        ViewPayablesDrilldown viewPayablesDrilldown = new ViewPayablesDrilldown("Dividend Income");
+        ViewPayablesDrilldown viewPayablesDrilldown = new ViewPayablesDrilldown("Entertainment  ");
         ListIterator<AccountStatement> requestIterator = viewPayablesDrilldown.getPayables().listIterator();
         AccountStatement temp;
         System.out.println("Num of entries = " + viewPayablesDrilldown.getNumberOfEntries());

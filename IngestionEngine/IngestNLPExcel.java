@@ -70,6 +70,10 @@ public class IngestNLPExcel {
                                     naturalLanguageProcessor.entryCategory = cell.getStringCellValue();
                                     //System.out.print(bsheetElementsList[bsIterator].subType + "t");
                                     break;
+                                case 3:
+                                    naturalLanguageProcessor.discretionarySpendingIndicator = cell.getStringCellValue();
+                                    //System.out.print(bsheetElementsList[bsIterator].subType + "t");
+                                    break;
                                 default:
                                     throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet; expected STRING");
                             }

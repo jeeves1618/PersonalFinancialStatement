@@ -42,6 +42,8 @@ public class ExpenseCalculator {
     private double totalBuyTrades;
     private double dLearningExpenses;
     private double healthCareExpenses;
+    private double discretionaryExpenses;
+    private double nonDiscretionaryExpenses;
     private double Unknown;
     long monthsBetween;
     private static LocalDate transactionDateHigh = LocalDate.parse("0001-01-01");
@@ -90,6 +92,7 @@ public class ExpenseCalculator {
             for (int j=0; j < NaturalLanguageProcessor.numofElements; j++){
                 if(transactionRemarks.toUpperCase().contains(tokenDescriptionMapper.get(j).tokenizedWord)){
                     AccountStatementList.get(i).entryCategory = tokenDescriptionMapper.get(j).entryCategory;
+                    AccountStatementList.get(i).discretionarySpendingIndicator = tokenDescriptionMapper.get(j).discretionarySpendingIndicator;
                     break;
                 }
             }
@@ -112,26 +115,33 @@ public class ExpenseCalculator {
                         break;
                     case "Brokerage Maintenance":
                         brokerageMaintenance = brokerageMaintenance + AccountStatementList.get(i).withdrawalAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount);
                         break;
                     case "Family":
                         forFamily = forFamily + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount);
                         break;
                     case "Monthly EMI":
                         monthlyEMI = monthlyEMI + AccountStatementList.get(i).withdrawalAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount );
                         break;
                     case "Bookentries":
                         break;
                     case "Cash Withdrawals":
                         cashWithdrawals = cashWithdrawals + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount);
                         break;
                     case "Apartment Maintenance":
                         apartmentMaintenance = apartmentMaintenance + AccountStatementList.get(i).withdrawalAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount );
                         break;
                     case "Electricity Expenses":
                         electricityBill = electricityBill + AccountStatementList.get(i).withdrawalAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount );
                         break;
                     case "Groceries":
                         groceries = groceries + AccountStatementList.get(i).withdrawalAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount );
                         break;
                     case "Interest Income":
                         interestIncome = interestIncome + AccountStatementList.get(i).depositAmount - AccountStatementList.get(i).withdrawalAmount;
@@ -141,21 +151,26 @@ public class ExpenseCalculator {
                         break;
                     case "Miscellaneous":
                         creditCardBill = creditCardBill + AccountStatementList.get(i).withdrawalAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount );
                         break;
                     case "House Keeping":
                         housekeepingExpenses = housekeepingExpenses + AccountStatementList.get(i).withdrawalAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount );
                         break;
                     case "Entertainment":
                         entertainmentExpenses = entertainmentExpenses + AccountStatementList.get(i).withdrawalAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount );
                         break;
                     case "Salary":
                         salaryIncome = salaryIncome + AccountStatementList.get(i).depositAmount;
                         break;
                     case "Investments":
                         totalInvestment = totalInvestment + AccountStatementList.get(i).withdrawalAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount );
                         break;
                     case "Travel Expenses":
                         travelExpenses = travelExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount);
                         break;
                     case "Dividend Income":
                         dividendIncome = dividendIncome + AccountStatementList.get(i).depositAmount;
@@ -166,18 +181,23 @@ public class ExpenseCalculator {
                         break;
                     case "Shopping and Eatout":
                         shoppingEatout = shoppingEatout + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount);
                         break;
                     case "Insurance":
                         homeInsurance = homeInsurance + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount);
                         break;
                     case "Education":
                         educationExpenses = educationExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount);
                         break;
                     case "Discretionary Learning":
                         dLearningExpenses = dLearningExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount);
                         break;
                     case "Healthcare and Fitness":
                         healthCareExpenses = healthCareExpenses + AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount;
+                        splitEntries(i, AccountStatementList.get(i).withdrawalAmount - AccountStatementList.get(i).depositAmount);
                         break;
                     default:
                         Unknown = Unknown + AccountStatementList.get(i).withdrawalAmount + AccountStatementList.get(i).depositAmount;
@@ -191,7 +211,13 @@ public class ExpenseCalculator {
         System.out.println("Based on the data from " + transactionDateLow + " to " + transactionDateHigh);
         monthsBetween = ChronoUnit.MONTHS.between(transactionDateLow,transactionDateHigh) + 1;
     }
-
+    void splitEntries(int i, double amt){
+        if (AccountStatementList.get(i).discretionarySpendingIndicator.equals("Y")){
+            discretionaryExpenses = discretionaryExpenses + amt;
+        } else {
+            nonDiscretionaryExpenses = nonDiscretionaryExpenses + amt;
+        }
+    }
     public String getTimePeriod(){
         return ("For the period " + transactionDateLow + " through " + transactionDateHigh);
     }
@@ -311,9 +337,17 @@ public class ExpenseCalculator {
                 + dLearningExpenses)/monthsBetween;
     }
     public double getTotalNonDiscretionExpenses(){
+        //EMI Should not be included because this function is invoked for Accounts Payable in Balance Sheet.
+        //EMI was already added there
         return (apartmentMaintenance + electricityBill + creditCardBill
                 + brokerageMaintenance + homeInsurance + cashWithdrawals + groceries + travelExpenses + forFamily + shoppingEatout
                 + entertainmentExpenses + housekeepingExpenses + educationExpenses + healthCareExpenses);
+    }
+    public double getNonDiscretionaryExpenses(){
+        return nonDiscretionaryExpenses/monthsBetween;
+    }
+    public double getDiscretionaryExpenses(){
+        return discretionaryExpenses/monthsBetween;
     }
     public String getTotalExpensesFmtd(){
         return rf.formattedRupee(ft.format(this.getTotalExpenses()));

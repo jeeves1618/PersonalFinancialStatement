@@ -18,11 +18,11 @@ class buildBalanceSheetTest {
         System.out.println("Please Enter Bun Monthly Income :");
         monthlyTakeHomeTwo = 200;
         buildBalanceSheet T = new buildBalanceSheet(monthlyTakeHomeOne, monthlyTakeHomeTwo);
-        System.out.println("Your total Monthly Incomes is : " + T.getIncomeTotalFmtd());
-        System.out.println("Your monthly expenses are     : " + T.getMonthlyExpensesFmtd());
-        System.out.println("Your net savings is           : " + T.getNetSavingsFmtd());
-        System.out.println("Your rental income 1 is       : " + T.totalCurrentLiabilities);
-        System.out.println("Your rental income 2 is       : " + T.totalCurrentAssets);
+        System.out.println("Your total Monthly Incomes is : " + T.chartOfAccountsList[15].cashValue);
+        System.out.println("Your monthly expenses are     : " + T.chartOfAccountsList[16].cashValue);
+        System.out.println("Your net savings is           : " + T.chartOfAccountsList[17].cashValue);
+        System.out.println("Your rental income 1 is       : " + T.chartOfAccountsList[18].cashValue);
+        System.out.println("Your rental income 2 is       : " + (T.chartOfAccountsList[15].cashValue + T.chartOfAccountsList[16].cashValue + T.chartOfAccountsList[17].cashValue + T.chartOfAccountsList[18].cashValue));
         System.out.println("Your rental income 3 is       : " + T.getMonthlyEMIFmtd());
         System.out.println("Our total assets is           : " + T.getTotalAssetsFmtd());
         System.out.println("Our total liquid asset        : " + T.getTotalLiquidAssets());

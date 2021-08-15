@@ -45,6 +45,9 @@ public class ExpenseCalculatorTest {
         System.out.println("Shopping and Eat out : " + rf.formattedRupee(ft.format(((e1.getShoppingExpense() + e2.getShoppingExpense()) / numOfMonths))));
         System.out.println("Family               : " + rf.formattedRupee(ft.format(((e1.getFamilyExpenses() + e2.getFamilyExpenses()) / numOfMonths))));
         System.out.println("Brokerage            : " + rf.formattedRupee(ft.format(((e1.getTotalBrokerage() + e2.getTotalBrokerage()) / numOfMonths))));
+        System.out.println("Entertainment        : " + rf.formattedRupee(ft.format(((e1.getEntertainmentExpenses() + e2.getEntertainmentExpenses()) / numOfMonths))));
+        System.out.println("Domestic help        : " + rf.formattedRupee(ft.format(((e1.getHousekeepingExpenses() + e2.getHousekeepingExpenses()) / numOfMonths))));
+        System.out.println("Home EMI             : " + rf.formattedRupee(ft.format(((e1.getMonthlyEMI() + e2.getMonthlyEMI()) / 1))));
         System.out.println("Education Expenses   : " + rf.formattedRupee(ft.format(((e1.getEducationExpenses() + e2.getEducationExpenses()) / numOfMonths))));
         System.out.println("Healthcare  Expenses : " + rf.formattedRupee(ft.format(((e1.getdHealthCareExpenses() + e2.getdHealthCareExpenses()) / numOfMonths))));
         System.out.println("Total Expenses       : " + rf.formattedRupee(ft.format(((e1.getTotalExpenses() + e2.getTotalExpenses()) / numOfMonths))));
@@ -68,6 +71,11 @@ public class ExpenseCalculatorTest {
         System.out.println("Total Deposits       : " + rf.formattedRupee(ft.format(((e1.getTotalDeposits() + e2.getTotalDeposits())))));
         System.out.println("Total Withdrawals    : " + rf.formattedRupee(ft.format(((e1.getTotalWithdrawals() + e2.getTotalWithdrawals())))));
         System.out.println("UnknownFmtd          : " + rf.formattedRupee(ft.format(((e1.getUnknown() + e2.getUnknown())))));
+
+        System.out.println(" ");
+        System.out.println("Total non discret    : " + rf.formattedRupee(ft.format(((e1.getTotalNonDiscretionExpenses() + e2.getTotalNonDiscretionExpenses())/1))));
+        System.out.println("Non Discretionary    : " + rf.formattedRupee(ft.format(((e1.getNonDiscretionaryExpenses() + e2.getNonDiscretionaryExpenses())))));
+        System.out.println("Discretionary        : " + rf.formattedRupee(ft.format(((e1.getDiscretionaryExpenses() + e2.getDiscretionaryExpenses())))));
 
 
         ListIterator<AccountStatement> unknownIterator = e1.getUnknownList().listIterator();
