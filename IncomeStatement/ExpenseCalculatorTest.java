@@ -26,7 +26,6 @@ public class ExpenseCalculatorTest {
 
         System.out.println(" ");
 
-
         System.out.println("Total Monthly Income     : " + rf.formattedRupee(ft.format(((e1.getTotalIncome() + e2.getTotalIncome()) / numOfMonths))));
         System.out.println("Total Monthly Expenses   : " + rf.formattedRupee(ft.format(((e1.getTotalExpenses() + e2.getTotalExpenses()) / numOfMonths))));
         System.out.println("Total Monthly Savings    : " + rf.formattedRupee(ft.format(((e1.getTotalSavings() + e2.getTotalSavings()) / numOfMonths))));
