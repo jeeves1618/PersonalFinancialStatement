@@ -3,10 +3,13 @@ package ViewServices;
 import CommonModules.NetworthHistory;
 import IngestionEngine.ingestNetworth;
 
+import java.util.ResourceBundle;
+
 public class ViewNetworthHistory {
     String fileWithPathname;
     public ViewNetworthHistory(){
-        this.fileWithPathname = "C:\\dev\\Data\\ChartOfAccounts.xlsx";
+        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+        this.fileWithPathname = properties.getString("chartOfAccounts");
     }
 
     public NetworthHistory[] getNetworthHistory(){

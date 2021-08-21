@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class ExpenseCalculator {
     private double totalSavings;
@@ -60,7 +61,8 @@ public class ExpenseCalculator {
 
     public ExpenseCalculator(String accountHolder, String accountType) throws ParseException {
 
-        String fileWithPathname = "C:\\dev\\Data\\" + accountHolder + "Acct" + accountType + ".xlsx";
+        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+        String fileWithPathname = properties.getString(accountHolder + accountType);
         System.out.println("File being accessed: " + fileWithPathname);
         IngestionEngine.IngestStatementExcel balanceSheet = new IngestionEngine.IngestStatementExcel(fileWithPathname);
         //IngestH2db balanceSheet = new IngestH2db();
@@ -68,7 +70,7 @@ public class ExpenseCalculator {
         AccountStatementList = balanceSheet.transferData();
 
         //Read the NLP Tokens from the spreadsheet
-        String tokenFileWithPathname = "C:\\dev\\Data\\NLP.xlsx";
+        String tokenFileWithPathname = properties.getString("NLPtokenizer");
         IngestNLPExcel tokenizer = new IngestNLPExcel(tokenFileWithPathname);
         ArrayList<NaturalLanguageProcessor> tokenDescriptionMapper;
         tokenDescriptionMapper = tokenizer.transferData();

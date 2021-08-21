@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class CashFlowCalculator {
     private double totalSavings;
@@ -35,7 +36,8 @@ public class CashFlowCalculator {
 
     public CashFlowCalculator(String accountHolder, String accountType) throws ParseException {
 
-        String fileWithPathname = "C:\\dev\\Data\\" + accountHolder + "Acct" + accountType + ".xlsx";
+        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+        String fileWithPathname = properties.getString(accountHolder + accountType);
         System.out.println("File being accessed: " + fileWithPathname);
         IngestionEngine.IngestStatementExcel balanceSheet = new IngestionEngine.IngestStatementExcel(fileWithPathname);
         //IngestH2db balanceSheet = new IngestH2db();

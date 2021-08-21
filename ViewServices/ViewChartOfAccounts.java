@@ -3,10 +3,13 @@ package ViewServices;
 import CommonModules.ChartOfAccounts;
 import IngestionEngine.ingestChartOfAcctsExcel;
 
+import java.util.ResourceBundle;
+
 public class ViewChartOfAccounts {
     String fileWithPathname;
     public ViewChartOfAccounts(){
-        this.fileWithPathname = "C:\\dev\\Data\\ChartOfAccounts.xlsx";
+        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+        this.fileWithPathname = properties.getString("chartOfAccounts");
     }
 
     public ChartOfAccounts[] getChartOfAccounts(){

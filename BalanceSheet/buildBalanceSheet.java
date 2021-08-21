@@ -8,6 +8,7 @@ import IngestionEngine.ingestChartOfAcctsExcel;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ResourceBundle;
 
 public class buildBalanceSheet {
     private double rentalIncomeOne;
@@ -42,7 +43,8 @@ public class buildBalanceSheet {
         totalCurrentLiabilities = 0;
         totalNonCurrentAssets = 0;
         totalNonCurrentLiabilities = 0;
-        String fileWithPathname = "C:\\dev\\Data\\ChartOfAccounts.xlsx";
+        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+        String fileWithPathname = properties.getString("chartOfAccounts");
         ingestChartOfAcctsExcel balanceSheet = new ingestChartOfAcctsExcel(fileWithPathname);
         //IngestH2db balanceSheet = new IngestH2db();
 
