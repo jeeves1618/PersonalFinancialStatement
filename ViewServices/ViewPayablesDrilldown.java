@@ -4,6 +4,7 @@ import CommonModules.AccountStatement;
 import CommonModules.RupeeFormatter;
 import IncomeStatement.ExpenseCalculator;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class ViewPayablesDrilldown {
         this.entryCategory = entryCategory;
     }
 
-    public ArrayList<AccountStatement> getPayables() throws ParseException{
+    public ArrayList<AccountStatement> getPayables() throws ParseException, IOException {
         DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
         RupeeFormatter rf = new RupeeFormatter();
         e1 = new ExpenseCalculator("Two", "Sal1");

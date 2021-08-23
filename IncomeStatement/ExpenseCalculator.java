@@ -4,13 +4,20 @@ import CommonModules.AccountStatement;
 import CommonModules.NaturalLanguageProcessor;
 import CommonModules.RupeeFormatter;
 import IngestionEngine.IngestNLPExcel;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.*;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.ResourceBundle;
 
 public class ExpenseCalculator {
     private double totalSavings;
@@ -45,6 +52,7 @@ public class ExpenseCalculator {
     private double discretionaryExpenses;
     private double nonDiscretionaryExpenses;
     private double Unknown;
+    private String datetime;
     long monthsBetween;
     private static LocalDate transactionDateHigh = LocalDate.parse("0001-01-01");
     private LocalDate transactionDateLow  = LocalDate.parse("9999-12-31");
@@ -57,10 +65,13 @@ public class ExpenseCalculator {
     ArrayList<AccountStatement> unknownList = new ArrayList<>();
     ArrayList<AccountStatement> requestedList = new ArrayList<>();
     ArrayList<AccountStatement> AccountStatementList;
+    ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+    Date dateNow;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss z");
 
-    public ExpenseCalculator(String accountHolder, String accountType) throws ParseException {
+    public ExpenseCalculator(String accountHolder, String accountType) throws IOException {
 
-        String fileWithPathname = "C:\\dev\\Data\\" + accountHolder + "Acct" + accountType + ".xlsx";
+        String fileWithPathname = properties.getString(accountHolder + accountType);
         System.out.println("File being accessed: " + fileWithPathname);
         IngestionEngine.IngestStatementExcel balanceSheet = new IngestionEngine.IngestStatementExcel(fileWithPathname);
         //IngestH2db balanceSheet = new IngestH2db();
@@ -68,7 +79,7 @@ public class ExpenseCalculator {
         AccountStatementList = balanceSheet.transferData();
 
         //Read the NLP Tokens from the spreadsheet
-        String tokenFileWithPathname = "C:\\dev\\Data\\NLP.xlsx";
+        String tokenFileWithPathname = properties.getString("NLPtokenizer");
         IngestNLPExcel tokenizer = new IngestNLPExcel(tokenFileWithPathname);
         ArrayList<NaturalLanguageProcessor> tokenDescriptionMapper;
         tokenDescriptionMapper = tokenizer.transferData();
@@ -93,6 +104,7 @@ public class ExpenseCalculator {
                 if(transactionRemarks.toUpperCase().contains(tokenDescriptionMapper.get(j).tokenizedWord)){
                     AccountStatementList.get(i).entryCategory = tokenDescriptionMapper.get(j).entryCategory;
                     AccountStatementList.get(i).discretionarySpendingIndicator = tokenDescriptionMapper.get(j).discretionarySpendingIndicator;
+                    updateNLPLastUsedDate(tokenDescriptionMapper.get(j).rowNumber,tokenDescriptionMapper.get(j).columnNumber);
                     break;
                 }
             }
@@ -374,5 +386,33 @@ public class ExpenseCalculator {
             }
         }
         return requestedList;
+    }
+    public void updateNLPLastUsedDate(int row, int col) throws IOException {
+        try {
+            String tokenFileWithPathname = properties.getString("NLPtokenizer");
+            FileInputStream file = new FileInputStream(tokenFileWithPathname);
+
+            XSSFWorkbook workbook = new XSSFWorkbook(file);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            Cell cell = null;
+
+            //Update the value of cell
+            dateNow = new Date();
+            datetime = dateFormat.format(dateNow);
+            System.out.println(datetime);
+            cell = sheet.getRow(row).getCell(col);
+            cell.setCellValue(datetime);
+
+            file.close();
+
+            FileOutputStream outFile =new FileOutputStream(new File(tokenFileWithPathname));
+            workbook.write(outFile);
+            outFile.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

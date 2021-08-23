@@ -3,12 +3,13 @@ package IncomeStatement;
 import CommonModules.AccountStatement;
 import CommonModules.RupeeFormatter;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ListIterator;
 
 public class ExpenseCalculatorTest {
-    public static void main(String[] Args) throws ParseException {
+    public static void main(String[] Args) throws ParseException, IOException {
         DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
         RupeeFormatter rf = new RupeeFormatter();
 
@@ -25,7 +26,6 @@ public class ExpenseCalculatorTest {
         System.out.println("Bun Savings     : " + rf.formattedRupee(ft.format(e2.getTotalSavings())));
 
         System.out.println(" ");
-
 
         System.out.println("Total Monthly Income     : " + rf.formattedRupee(ft.format(((e1.getTotalIncome() + e2.getTotalIncome()) / numOfMonths))));
         System.out.println("Total Monthly Expenses   : " + rf.formattedRupee(ft.format(((e1.getTotalExpenses() + e2.getTotalExpenses()) / numOfMonths))));

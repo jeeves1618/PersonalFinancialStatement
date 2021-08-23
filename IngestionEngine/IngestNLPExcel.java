@@ -1,6 +1,6 @@
 package IngestionEngine;
 
-import CommonModules.NaturalLanguageProcessor;
+import  CommonModules.NaturalLanguageProcessor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -55,6 +55,11 @@ public class IngestNLPExcel {
                                     naturalLanguageProcessor.identificationNumber = (int) cell.getNumericCellValue();
                                     //System.out.print(bsheetElementsList[bsIterator].typeAssetOrLiability + "t");
                                     break;
+                                case 4:
+                                    naturalLanguageProcessor.columnNumber = cell.getColumnIndex();
+                                    naturalLanguageProcessor.rowNumber = bsIterator;
+                                    //System.out.print(bsheetElementsList[bsIterator].subType + "t");
+                                    break;
                                 default:
                                     throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet; expected NUMERIC");
                             }
@@ -74,12 +79,26 @@ public class IngestNLPExcel {
                                     naturalLanguageProcessor.discretionarySpendingIndicator = cell.getStringCellValue();
                                     //System.out.print(bsheetElementsList[bsIterator].subType + "t");
                                     break;
+                                case 4:
+                                    naturalLanguageProcessor.columnNumber = cell.getColumnIndex();
+                                    naturalLanguageProcessor.rowNumber = bsIterator;
+                                    naturalLanguageProcessor.lastUsedDate = cell.getStringCellValue();
+                                    //System.out.print(bsheetElementsList[bsIterator].subType + "t");
+                                    break;
                                 default:
                                     throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet; expected STRING");
                             }
                             break;
                         case BLANK:
-                            //System.out.print(cell.getStringCellValue() + "t");
+                            switch (cell.getColumnIndex()) {
+                                case 4:
+                                    naturalLanguageProcessor.columnNumber = cell.getColumnIndex();
+                                    naturalLanguageProcessor.rowNumber = bsIterator;
+                                    //System.out.print(bsheetElementsList[bsIterator].subType + "t");
+                                    break;
+                                default:
+                                    throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet; expected STRING" + cell.getColumnIndex() + " and " + bsIterator);
+                            }
                             break;
                         default:
                             throw new IllegalStateException("Unexpected value: " + cell.getCellType());

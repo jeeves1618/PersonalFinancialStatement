@@ -5,6 +5,7 @@ import CommonModules.ChartOfAccounts;
 import IngestionEngine.ingestChartOfAcctsExcel;
 
 import java.text.DecimalFormat;
+import java.util.ResourceBundle;
 
 public class IncomeCalculator {
     private double houseLoanInt;
@@ -36,7 +37,8 @@ public class IncomeCalculator {
     }
 
     public IncomeCalculator(String itemDescription){
-        String fileWithPathname = "C:\\dev\\Data\\ChartOfAccounts.xlsx";
+        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+        String fileWithPathname = properties.getString("chartOfAccounts");
         ingestChartOfAcctsExcel balanceSheet = new ingestChartOfAcctsExcel(fileWithPathname);
 
         ChartOfAccounts[] chartOfAccountsList;

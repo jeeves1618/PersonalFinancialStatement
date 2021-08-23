@@ -2,11 +2,12 @@ package ViewServices;
 
 import CommonModules.AccountStatement;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ListIterator;
 
 public class ViewPayablesDrilldownTest {
-    public static void main(String[] args)  throws ParseException {
+    public static void main(String[] args) throws ParseException, IOException {
         double totalWithdrawals = 0, totalDeposits = 0;
         ViewPayablesDrilldown viewPayablesDrilldown = new ViewPayablesDrilldown("Entertainment  ");
         ListIterator<AccountStatement> requestIterator = viewPayablesDrilldown.getPayables().listIterator();

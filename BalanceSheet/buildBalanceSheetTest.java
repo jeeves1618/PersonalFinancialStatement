@@ -1,12 +1,13 @@
 package BalanceSheet;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
 class buildBalanceSheetTest {
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, IOException {
         double monthlyTakeHomeOne;
         double monthlyTakeHomeTwo;
         Scanner scan = new Scanner(System.in);

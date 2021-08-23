@@ -5,9 +5,11 @@ import CommonModules.RupeeFormatter;
 import IncomeStatement.ExpenseCalculator;
 import IngestionEngine.ingestChartOfAcctsExcel;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ResourceBundle;
 
 public class buildBalanceSheet {
     private double rentalIncomeOne;
@@ -33,7 +35,7 @@ public class buildBalanceSheet {
     ExpenseCalculator e1 = new ExpenseCalculator("Two", "Sal1");
     ExpenseCalculator e2 = new ExpenseCalculator("One", "Sal1");
 
-    public buildBalanceSheet(double monthlyTakeHomeOne, double monthlyTakeHomeTwo) throws ParseException {
+    public buildBalanceSheet(double monthlyTakeHomeOne, double monthlyTakeHomeTwo) throws ParseException, IOException {
 
         this.monthlyTakeHomeOne = monthlyTakeHomeOne;
         this.monthlyTakeHomeTwo = monthlyTakeHomeTwo;
@@ -42,7 +44,8 @@ public class buildBalanceSheet {
         totalCurrentLiabilities = 0;
         totalNonCurrentAssets = 0;
         totalNonCurrentLiabilities = 0;
-        String fileWithPathname = "C:\\dev\\Data\\ChartOfAccounts.xlsx";
+        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+        String fileWithPathname = properties.getString("chartOfAccounts");
         ingestChartOfAcctsExcel balanceSheet = new ingestChartOfAcctsExcel(fileWithPathname);
         //IngestH2db balanceSheet = new IngestH2db();
 
