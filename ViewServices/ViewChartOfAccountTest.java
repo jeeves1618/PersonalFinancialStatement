@@ -1,11 +1,13 @@
 package ViewServices;
 
 import CommonModules.ChartOfAccounts;
+
 import CommonModules.NaturalLanguageProcessor;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 import java.util.ResourceBundle;
 
 public class ViewChartOfAccountTest {
@@ -40,12 +42,19 @@ public class ViewChartOfAccountTest {
         fileWithPathname = properties.getString(accountHolder + accountType);
         System.out.println("For the accountHolder " + accountHolder + "and the accountType " + accountType + ", Path Name is : " + fileWithPathname);
 
+
         ViewNaturalLanguageProcessor NLP = new ViewNaturalLanguageProcessor();
         ArrayList<NaturalLanguageProcessor> NLPlist = NLP.getNlpEntries();
 
-        for (int i = 0; i < NaturalLanguageProcessor.numofElements; i++){
+        for (int i = 0; i < NaturalLanguageProcessor.numofElements; i++) {
             System.out.println(NLPlist.get(i).tokenizedWord + " / " + NLPlist.get(i).entryCategory + " / " + NLPlist.get(i).discretionarySpendingIndicator
-            + NLPlist.get(i).identificationNumber + " / " + NLPlist.get(i).lastUsedDate);
+                    + NLPlist.get(i).identificationNumber + " / " + NLPlist.get(i).lastUsedDate);
+        }
+        for (int i = ChartOfAccounts.numofElements; i < ChartOfAccounts.numofElements; i++){
+            System.out.println(chartOfAccountsList[i].identificationNumber);
+            System.out.println(chartOfAccountsList[i].identificationNumber);
+            System.out.println(chartOfAccountsList[i].identificationNumber);
+            System.out.println(chartOfAccountsList[i].identificationNumber);
         }
 
 

@@ -71,6 +71,8 @@ public class ExpenseCalculator {
 
     public ExpenseCalculator(String accountHolder, String accountType) throws IOException {
 
+        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+
         String fileWithPathname = properties.getString(accountHolder + accountType);
         System.out.println("File being accessed: " + fileWithPathname);
         IngestionEngine.IngestStatementExcel balanceSheet = new IngestionEngine.IngestStatementExcel(fileWithPathname);
