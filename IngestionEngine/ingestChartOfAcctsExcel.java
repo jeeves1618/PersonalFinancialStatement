@@ -48,6 +48,7 @@ public class ingestChartOfAcctsExcel {
                     Cell cell = cellIterator.next();
 
                     //Check the cell type and format accordingly
+                    chartOfAccountsList[bsIterator].rowNumber = bsIterator;
                     switch (cell.getCellType())
                     {
                         case NUMERIC:
@@ -90,7 +91,7 @@ public class ingestChartOfAcctsExcel {
                                     //System.out.print(bsheetElementsList[bsIterator].itemDescription + "t");
                                     break;
                                 default:
-                                    throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet");
+                                    throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet " + cell.getColumnIndex() + " " + bsIterator);
                             }
                             break;
                         case BLANK:

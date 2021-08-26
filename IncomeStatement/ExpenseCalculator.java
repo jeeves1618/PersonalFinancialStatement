@@ -10,7 +10,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -106,7 +105,7 @@ public class ExpenseCalculator {
                 if(transactionRemarks.toUpperCase().contains(tokenDescriptionMapper.get(j).tokenizedWord)){
                     AccountStatementList.get(i).entryCategory = tokenDescriptionMapper.get(j).entryCategory;
                     AccountStatementList.get(i).discretionarySpendingIndicator = tokenDescriptionMapper.get(j).discretionarySpendingIndicator;
-                    updateNLPLastUsedDate(tokenDescriptionMapper.get(j).rowNumber,tokenDescriptionMapper.get(j).columnNumber);
+                    /*updateNLPLastUsedDate(tokenDescriptionMapper.get(j).rowNumber,tokenDescriptionMapper.get(j).columnNumber);*/
                     break;
                 }
             }

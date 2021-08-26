@@ -17,6 +17,8 @@ public class ChartOfAccounts {
     public String cashValueFmtd;
     public String financialStatement;
     public String isAssetLiquidInd;
+    public int columnNumber;
+    public int rowNumber;
 
     public ChartOfAccounts(){
         this.typeAssetOrLiability = "typeAssetOrLiability";
@@ -26,5 +28,7 @@ public class ChartOfAccounts {
         this.cashValue = 0.0d;
         this.cashValueFmtd = "Rs 0.00";
         this.financialStatement = "BalanceSheetOrIncomeStatementOrCashFlow";
+        this.columnNumber = 0;
+        this.rowNumber = 0;
     }
 }

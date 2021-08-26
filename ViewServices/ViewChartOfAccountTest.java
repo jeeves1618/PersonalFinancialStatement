@@ -1,17 +1,13 @@
 package ViewServices;
 
 import CommonModules.ChartOfAccounts;
-
 import CommonModules.NaturalLanguageProcessor;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
+import java.io.IOException;
 import java.util.ResourceBundle;
 
 public class ViewChartOfAccountTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         ViewChartOfAccounts viewChartOfAccounts = new ViewChartOfAccounts();
         System.out.println("His Name : " + viewChartOfAccounts.getHisName());
         System.out.println("Her Name : " + viewChartOfAccounts.getHerName());
@@ -19,7 +15,7 @@ public class ViewChartOfAccountTest {
 
         String accountHolder, accountType;
 
-        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+        ResourceBundle properties = ResourceBundle.getBundle("Properties");
         String pathName = properties.getString("chartOfAccounts");
         System.out.println("Path Name is : " + pathName);
         accountHolder = "One";
@@ -27,41 +23,15 @@ public class ViewChartOfAccountTest {
         String fileWithPathname = properties.getString(accountHolder + accountType);
         System.out.println("For the accountHolder " + accountHolder + "and the accountType " + accountType + ", Path Name is : " + fileWithPathname);
 
-        accountHolder = "Two";
-        accountType = "Sal1";
-        fileWithPathname = properties.getString(accountHolder + accountType);
-        System.out.println("For the accountHolder " + accountHolder + "and the accountType " + accountType + ", Path Name is : " + fileWithPathname);
-
-        accountHolder = "One";
-        accountType = "Sav1";
-        fileWithPathname = properties.getString(accountHolder + accountType);
-        System.out.println("For the accountHolder " + accountHolder + "and the accountType " + accountType + ", Path Name is : " + fileWithPathname);
-
-        accountHolder = "Two";
-        accountType = "Sav1";
-        fileWithPathname = properties.getString(accountHolder + accountType);
-        System.out.println("For the accountHolder " + accountHolder + "and the accountType " + accountType + ", Path Name is : " + fileWithPathname);
-
-
         ViewNaturalLanguageProcessor NLP = new ViewNaturalLanguageProcessor();
-        ArrayList<NaturalLanguageProcessor> NLPlist = NLP.getNlpEntries();
-
-        for (int i = 0; i < NaturalLanguageProcessor.numofElements; i++) {
-            System.out.println(NLPlist.get(i).tokenizedWord + " / " + NLPlist.get(i).entryCategory + " / " + NLPlist.get(i).discretionarySpendingIndicator
-                    + NLPlist.get(i).identificationNumber + " / " + NLPlist.get(i).lastUsedDate);
+        //NLP.updateTokenEntry(2010169,"ACH/ICICI","Family","Y");
+        /*for (int chartOfAccountsIterator = 0; chartOfAccountsIterator < ChartOfAccounts.numofElements; chartOfAccountsIterator++) {
+            System.out.println(chartOfAccountsList[chartOfAccountsIterator].identificationNumber);*/
+        //NLP.deleteTokenEntry(2010174);
+        NaturalLanguageProcessor N = NLP.getTokenEntry(9999999);
+        System.out.println("Token is " + N.tokenizedWord + " and Token ID is " + N.identificationNumber );
+        N = NLP.getTokenEntry(2010174);
+        System.out.println("Token is " + N.tokenizedWord + " and Token ID is " + N.identificationNumber );
         }
-        for (int i = ChartOfAccounts.numofElements; i < ChartOfAccounts.numofElements; i++){
-            System.out.println(chartOfAccountsList[i].identificationNumber);
-            System.out.println(chartOfAccountsList[i].identificationNumber);
-            System.out.println(chartOfAccountsList[i].identificationNumber);
-            System.out.println(chartOfAccountsList[i].identificationNumber);
-        }
-
-
-        Date dNow = new Date();
-        SimpleDateFormat ft = new SimpleDateFormat("yyMMddhhmmssMsSSSSS");
-        String datetime = ft.format(dNow);
-        System.out.println(datetime);
     }
 
-}
