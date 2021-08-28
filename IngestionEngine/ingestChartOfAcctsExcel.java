@@ -64,7 +64,7 @@ public class ingestChartOfAcctsExcel {
                                     //System.out.print(bsheetElementsList[bsIterator].typeAssetOrLiability + "t");
                                     break;
                                 default:
-                                    throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet");
+                                    throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet " + bsIterator);
                             }
                             break;
                         case STRING:

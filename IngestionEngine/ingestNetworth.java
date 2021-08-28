@@ -65,6 +65,11 @@ public class ingestNetworth {
                                     NetworthHistoryList[bsIterator].totalAmount = cell.getNumericCellValue();
                                     NetworthHistoryList[bsIterator].totalAmountFmtd = rf.formattedRupee(ft.format(NetworthHistoryList[bsIterator].totalAmount));
                                     break;
+                                case 4:
+                                    NetworthHistoryList[bsIterator].serialNumber = (int)cell.getNumericCellValue();
+                                    NetworthHistoryList[bsIterator].columnNumber = cell.getColumnIndex();
+                                    NetworthHistoryList[bsIterator].rowNumber = bsIterator;
+                                    break;
                                 default:
                                     throw new IllegalStateException("Unexpected Cell Value in the Spreadsheet " + bsIterator + " and " + cell.getColumnIndex());
                             }
