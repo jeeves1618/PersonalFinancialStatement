@@ -35,7 +35,6 @@ public class IncomeCalculator {
             this.PF = (annualSalary * 0.4 * 0.12) / 12;
         this.annualSalary = annualSalary;
     }
-
     public IncomeCalculator(String itemDescription){
         ResourceBundle properties  = ResourceBundle.getBundle("Properties");
         String fileWithPathname = properties.getString("chartOfAccounts");
@@ -56,7 +55,7 @@ public class IncomeCalculator {
             taxSurchargeFactor=1.0D;
         }
     }
-    public void calculateOldTakeHome() {
+    public double calculateOldTakeHome() {
 
         double remainingSalary = 0.0D;
 
@@ -76,10 +75,10 @@ public class IncomeCalculator {
         }
         System.out.println(remainingSalary);
         totalTax = totalTax * taxSurchargeFactor;
-        monthlyTakeHome = (annualSalary - totalTax - professionalTax - (PF*12)) / 12.0D;
+        return monthlyTakeHome = (annualSalary - totalTax - professionalTax - (PF*12)) / 12.0D;
     }
 
-    public void calculateNewTakeHome() {
+    public double calculateNewTakeHome() {
 
         double remainingSalary = 0.0D;
         totalTax = 0.0D;
@@ -95,7 +94,7 @@ public class IncomeCalculator {
             }
         }
         if (annualSalary >= 5000000) totalTax = totalTax * 1.1;
-        monthlyTakeHome = (annualSalary - totalTax - professionalTax - (PF * 12)) / 12.0D;
+        return monthlyTakeHome = (annualSalary - totalTax - professionalTax - (PF * 12)) / 12.0D;
     }
 
     public String getAnnualSalaryFmtd(){
