@@ -2,15 +2,19 @@ package IncomeStatement;
 
 import CommonModules.AccountStatement;
 import CommonModules.RupeeFormatter;
+import ViewServices.ViewPayablesDrilldown;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ListIterator;
+import java.util.ResourceBundle;
 
 public class ExpenseCalculatorTest {
     public static void main(String[] Args) throws ParseException, IOException {
-        DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
+        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+        String currencyFormat = properties.getString("currencyFormat");
+        DecimalFormat ft = new DecimalFormat(currencyFormat);
         RupeeFormatter rf = new RupeeFormatter();
 
         ExpenseCalculator e1 = new ExpenseCalculator("Two", "Sal1");
@@ -77,8 +81,8 @@ public class ExpenseCalculatorTest {
         System.out.println("Non Discretionary    : " + rf.formattedRupee(ft.format(((e1.getNonDiscretionaryExpenses() + e2.getNonDiscretionaryExpenses())))));
         System.out.println("Discretionary        : " + rf.formattedRupee(ft.format(((e1.getDiscretionaryExpenses() + e2.getDiscretionaryExpenses())))));
 
-
-        ListIterator<AccountStatement> unknownIterator = e1.getUnknownList().listIterator();
+        ViewPayablesDrilldown viewPayablesDrilldown = new ViewPayablesDrilldown("Salary");
+        ListIterator<AccountStatement> unknownIterator = viewPayablesDrilldown.getPayables().listIterator();
         AccountStatement temp;
         while (unknownIterator.hasNext()) {
             temp = unknownIterator.next();
@@ -86,13 +90,13 @@ public class ExpenseCalculatorTest {
             System.out.println("Withdrawal Amount : " + temp.withdrawalAmountFmtd);
             System.out.println("Deposit Amount : " + temp.depositAmountFmtd);
         }
-
+        /*
         unknownIterator = e2.getUnknownList().listIterator();
         while (unknownIterator.hasNext()) {
             temp = unknownIterator.next();
             System.out.println("Remarks : " + temp.transactionRemarks);
             System.out.println("Withdrawal Amount : " + temp.withdrawalAmountFmtd);
             System.out.println("Deposit Amount : " + temp.depositAmountFmtd);
-        }
+        }*/
     }
 }

@@ -58,13 +58,14 @@ public class ExpenseCalculator {
     //private LocalDate transactionDate;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-    DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
+    ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+    String currencyFormat = properties.getString("currencyFormat");
+    DecimalFormat ft = new DecimalFormat(currencyFormat);
     RupeeFormatter rf = new RupeeFormatter();
     ArrayList<AccountStatement> unknownList = new ArrayList<>();
     ArrayList<AccountStatement> requestedList = new ArrayList<>();
     ArrayList<AccountStatement> AccountStatementList;
-    ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+
     Date dateNow;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss z");
 
@@ -81,6 +82,7 @@ public class ExpenseCalculator {
 
         //Read the NLP Tokens from the spreadsheet
         String tokenFileWithPathname = properties.getString("NLPtokenizer");
+
         IngestNLPExcel tokenizer = new IngestNLPExcel(tokenFileWithPathname);
         ArrayList<NaturalLanguageProcessor> tokenDescriptionMapper;
         tokenDescriptionMapper = tokenizer.transferData();
@@ -116,7 +118,7 @@ public class ExpenseCalculator {
             }
             LocalDate transactionDate = LocalDate.parse(AccountStatementList.get(i).transactionDate, formatter);
             if (transactionDate.isBefore(transactionDateHigh.minusYears(1l).plusDays(1l))){
-                System.out.println("Before");
+                ;
             } else
             {
                 switch (AccountStatementList.get(i).entryCategory) {
@@ -218,6 +220,9 @@ public class ExpenseCalculator {
                         AccountStatement unknownEntry = new AccountStatement();
                         unknownEntry = AccountStatementList.get(i);
                         unknownList.add(unknownEntry);
+                }
+                if (AccountStatementList.get(i).transactionRemarks.contains("CITIN21227484176")){
+                    System.out.println("Sherlock :" + AccountStatementList.get(i).entryCategory);
                 }
             }
         }
@@ -384,6 +389,7 @@ public class ExpenseCalculator {
             } else{
                 requestedEntry = AccountStatementList.get(i);
                 requestedList.add(requestedEntry);
+
             }
         }
         return requestedList;

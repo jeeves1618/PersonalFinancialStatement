@@ -29,8 +29,9 @@ public class buildBalanceSheet {
 
     public ChartOfAccounts[] chartOfAccountsList;
     private LocalDate survivalDate;
-
-    DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
+    ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+    String currencyFormat = properties.getString("currencyFormat");
+    DecimalFormat ft = new DecimalFormat(currencyFormat);
     RupeeFormatter rf = new RupeeFormatter();
     ExpenseCalculator e1 = new ExpenseCalculator("Two", "Sal1");
     ExpenseCalculator e2 = new ExpenseCalculator("One", "Sal1");

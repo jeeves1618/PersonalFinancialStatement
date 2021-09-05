@@ -9,6 +9,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.ResourceBundle;
 
 /**
  * This class should take the category as input and list down all transactions under that category
@@ -27,7 +28,9 @@ public class ViewPayablesDrilldown {
     }
 
     public ArrayList<AccountStatement> getPayables() throws ParseException, IOException {
-        DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
+        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+        String currencyFormat = properties.getString("currencyFormat");
+        DecimalFormat ft = new DecimalFormat(currencyFormat);
         RupeeFormatter rf = new RupeeFormatter();
         e1 = new ExpenseCalculator("Two", "Sal1");
         ListIterator<AccountStatement> requestIterator = e1.getPayables(entryCategory).listIterator();

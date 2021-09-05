@@ -18,8 +18,9 @@ public class IncomeCalculator {
     private double totalTax;
     private double PF;
     private double taxSurchargeFactor;
-
-    DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
+    ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+    String currencyFormat = properties.getString("currencyFormat");
+    DecimalFormat ft = new DecimalFormat(currencyFormat);
     RupeeFormatter rf = new RupeeFormatter();
 
     public IncomeCalculator(double annualSalary, double houseLoanInt, double pf) {

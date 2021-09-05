@@ -1,7 +1,7 @@
 package IngestionEngine;
 
-import CommonModules.RupeeFormatter;
 import CommonModules.ChartOfAccounts;
+import CommonModules.RupeeFormatter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -11,11 +11,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.text.DecimalFormat;
 import java.util.Iterator;
+import java.util.ResourceBundle;
 
 public class ingestChartOfAcctsExcel {
 
     private static String fileWithPathname;
-    DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
+    ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+    String currencyFormat = properties.getString("currencyFormat");
+    DecimalFormat ft = new DecimalFormat(currencyFormat);
     RupeeFormatter rf = new RupeeFormatter();
     ChartOfAccounts[] chartOfAccountsList = new ChartOfAccounts[100];
 

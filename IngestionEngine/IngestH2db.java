@@ -1,19 +1,22 @@
 package IngestionEngine;
 
-import CommonModules.RupeeFormatter;
 import CommonModules.ChartOfAccounts;
+import CommonModules.RupeeFormatter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.util.ResourceBundle;
 
 public class IngestH2db{
     private static final String QUERY = "select BALTYPE ,BALSUBTYPE ,BALDESCCODE ,BALAMOUNT from BALSHEET where BALACTIVEIND = ?";
     protected ChartOfAccounts[] transferData() {
         int bsIterator = 0;
-        DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
+        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+        String currencyFormat = properties.getString("currencyFormat");
+        DecimalFormat ft = new DecimalFormat(currencyFormat);
         RupeeFormatter rf = new RupeeFormatter();
         ChartOfAccounts[] chartOfAccountsList = new ChartOfAccounts[100];
 

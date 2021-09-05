@@ -29,8 +29,9 @@ public class CashFlowCalculator {
     //private LocalDate transactionDate;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-    DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
+    ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+    String currencyFormat = properties.getString("currencyFormat");
+    DecimalFormat ft = new DecimalFormat(currencyFormat);
     RupeeFormatter rf = new RupeeFormatter();
     ArrayList<AccountStatement> unknownList = new ArrayList<>();
 

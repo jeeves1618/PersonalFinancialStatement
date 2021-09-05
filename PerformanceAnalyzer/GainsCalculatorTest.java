@@ -6,10 +6,13 @@ import CommonModules.RupeeFormatter;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ListIterator;
+import java.util.ResourceBundle;
 
 public class GainsCalculatorTest {
     public static void main(String[] Args) throws ParseException {
-        DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
+        ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+        String currencyFormat = properties.getString("currencyFormat");
+        DecimalFormat ft = new DecimalFormat(currencyFormat);
         RupeeFormatter rf = new RupeeFormatter();
 
         GainsCalculator e1 = new GainsCalculator("Two", "Sav1");

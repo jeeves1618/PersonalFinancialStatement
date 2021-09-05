@@ -12,11 +12,14 @@ import java.io.FileInputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ResourceBundle;
 
 public class IngestStatementExcel{
 
     private static String fileWithPathname;
-    DecimalFormat ft = new DecimalFormat("Rs ##,##,##0.00");
+    ResourceBundle properties  = ResourceBundle.getBundle("Properties");
+    String currencyFormat = properties.getString("currencyFormat");
+    DecimalFormat ft = new DecimalFormat(currencyFormat);
     RupeeFormatter rf = new RupeeFormatter();
     AccountStatement AccountStatementEntry = new AccountStatement();
     ArrayList<AccountStatement> AccountStatementList = new ArrayList<AccountStatement>();
@@ -74,7 +77,7 @@ public class IngestStatementExcel{
                                     //System.out.print(AccountStatementEntry.cashValue + "t");
                                     break;
                                 default:
-                                    throw new IllegalStateException("Unexpected NUMERIC Cell Value in the Spreadsheet :" + bsIterator + " and " + cell.getColumnIndex());
+                                    throw new IllegalStateException("Unexpected NUMERIC Cell Value in the Spreadsheet :" + bsIterator + " and " + cell.getColumnIndex() + " Value = " + cell.getNumericCellValue());
                             }
                             break;
                         case STRING:
