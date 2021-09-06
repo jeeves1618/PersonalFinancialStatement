@@ -1,16 +1,18 @@
 package admin;
 
-import org.apache.commons.configuration2.ex.ConfigurationException;
+import java.io.IOException;
 
 public class CurrencyCustomizationTest {
     public static void main(String[] args) {
-        String currencyFormat = new CurrencyCustomization().getCurrencyFormat();
-        System.out.println(currencyFormat);
-        CurrencyCustomization c = new CurrencyCustomization();
-
         try {
-            c.customizeCurrency("testToken", "Order Parotta");
-        } catch (ConfigurationException e) {
+            NLPTokenManager ExpenseInstanceTwo = new NLPTokenManager();
+            String refreshMessageText;
+            refreshMessageText = ExpenseInstanceTwo.NLPTokenRefresh("One", "Sal1");
+            refreshMessageText = ExpenseInstanceTwo.NLPTokenRefresh("Two", "Sal1");
+            refreshMessageText = ExpenseInstanceTwo.NLPTokenRefresh("One", "Sav1");
+            refreshMessageText = ExpenseInstanceTwo.NLPTokenRefresh("Two", "Sav1");
+            System.out.println(refreshMessageText);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
