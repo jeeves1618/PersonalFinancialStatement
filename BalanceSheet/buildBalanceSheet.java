@@ -70,6 +70,7 @@ public class buildBalanceSheet {
             if(chartOfAccountsList[i].subType.equals("Rent") && chartOfAccountsList[i].itemDescription.equals("RentalIncome3")) {
                 this.rentalIncomeThree = chartOfAccountsList[i].cashValue;
             } else
+                
             if(chartOfAccountsList[i].subType.equals("Account Payables") && chartOfAccountsList[i].itemDescription.equals("HouseHoldExpenses")) {
                 chartOfAccountsList[i].cashValue = e1.getTotalNonDiscretionExpenses()+ e2.getTotalNonDiscretionExpenses();
                 chartOfAccountsList[i].cashValueFmtd = rf.formattedRupee(ft.format((e1.getTotalNonDiscretionExpenses()+ e2.getTotalNonDiscretionExpenses())/e1.getMonthsBetween()*12));
